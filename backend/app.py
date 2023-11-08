@@ -1,5 +1,5 @@
 from flask import Flask
-from .dbconnection import DBConnection, DBOperations
+from dbconnection import DBConnection, DBOperations
 
 db_connection = DBConnection()
 db_connection.connect()
