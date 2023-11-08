@@ -29,5 +29,6 @@ jobs:
       run: |
         # If needed, before starting the Flask application, you can add additional steps to prepare your environment,
         # such as setting environment variables or running database migrations.
+        cd backend/
         python -m flask run --host=0.0.0.0
 
