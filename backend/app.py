@@ -22,7 +22,7 @@ def register():
     email = data.get('email')
     password = data.get('password')
 
-    if user_operations.get_by_email(email):
+    if user_operations.get(email):
         return jsonify({'status': 'error', 'message': 'Email already in use'}), 409
     
     def hash_password(password):
