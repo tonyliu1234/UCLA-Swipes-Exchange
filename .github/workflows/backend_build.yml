@@ -30,5 +30,22 @@ jobs:
         # If needed, before starting the Flask application, you can add additional steps to prepare your environment,
         # such as setting environment variables or running database migrations.
         cd backend/
-        python -m flask run --host=0.0.0.0
+        python -m flask run --host=0.0.0.0 &
+        FLASK_PID=$!
+        echo "Flask server started with PID $FLASK_PID"
 
+    - name: Verify Flask server is running
+      run: |
+        sleep 10  # Waits for 10 seconds to give Flask enough time to start
+        if kill -0 $FLASK_PID 2>/dev/null; then
+          echo "Flask server is running"
+        else
+          echo "Failed to start Flask server"
+          exit 1
+        fi
+
+    - name: Shutdown Flask server
+      if: always()
+      run: |
+        kill $FLASK_PID
+        echo "Flask server has been stopped"
