@@ -1,20 +1,34 @@
 from .order import Order, Side
 from bson import ObjectId
+
 class User:
   def __init__(
       self,
       name: str, 
       phone: str, 
       email: str,
+      _id = None,
+      notifications = [],
+      orders = [],
       password: str
     ):
-    self.id = ObjectId()
+    self.id = ObjectId() if not _id else _id
     self.name = name
     self.phone = phone
     self.email = email
     self.password = password
-    self.notifications = []
-    self.orders = []
+    self.notifications = notifications
+    self.orders = orders
+
+  @classmethod
+  def parse_from(cls, user_binary_object):
+    _id = user_binary_object['_id']
+    name = user_binary_object['name']
+    phone = user_binary_object['phone']
+    email = user_binary_object['email']
+    notifications = user_binary_object['notifications']
+    orders = user_binary_object['orders']
+    return cls(name, phone, email, _id, notifications, orders)
 
   def create_order(self, price, side: Side):
     order = Order(price, self.id, side)

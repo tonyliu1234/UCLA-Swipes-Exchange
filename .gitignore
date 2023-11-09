@@ -2,3 +2,4 @@
 .vscode
 backend/venv/
 backend/__pycache__/
+backend/.idea/
