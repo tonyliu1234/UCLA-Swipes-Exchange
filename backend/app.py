@@ -35,7 +35,7 @@ def register():
     hashed_password = hash_password(password)
     user = User(name, email, phone, hashed_password)
     try:
-      user_id = user_operations.create(user.binary_value())
+      user_id = user_operations.create(user.binary_value)
       return jsonify({'status': 'success', 'message': 'User {0} registered successfully'.format(user_id)}), 201
     except:
       return jsonify({'status': 'error', 'message': 'Registration failed'}), 500
