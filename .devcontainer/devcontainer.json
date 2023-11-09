@@ -1,7 +1,7 @@
 {
 	"name": "full-stack",
 	"build": {
-		"dockerfile": "Dockerfile",
+		"dockerfile": "Dockerfile"
 	},
 	"runArgs": [
 		"--name",
