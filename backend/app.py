@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from .dbconnection import DBConnection, DBOperations
+from dbconnection import DBConnection, DBOperations
 # from flask_login import LoginManager, login_required  # noqa: F401
 from user import User
 import hashlib

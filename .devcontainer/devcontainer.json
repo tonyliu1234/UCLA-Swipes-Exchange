@@ -1,0 +1,19 @@
+{
+	"name": "full-stack",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+	"runArgs": [
+		"--name",
+		"full-stack"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"redhat.vscode-yaml"
+			]
+		}
+	}
+}
