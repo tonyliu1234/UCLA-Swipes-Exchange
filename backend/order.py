@@ -16,7 +16,7 @@ class Order:
           is_matched: bool = False,
           _id = None,
       ):
-        self.id = ObjectId() if not _id else 
+        self.id = _id or ObjectId()
         self.price = price
         self.owner_id = owner_id
         self.side = side
