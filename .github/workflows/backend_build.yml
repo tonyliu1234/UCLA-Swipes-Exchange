@@ -1,0 +1,42 @@
+name: Flask CI
+
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x' # Use the version of Python to which your project is tied, e.g., 3.8, 3.9, etc.
+
+    - name: Install dependencies
+      run: |
+        cd backend/
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Flask application
+      env:
+        FLASK_APP: app.py # replace 'app.py' with the entry file of your Flask application if different
+        FLASK_ENV: development
+      run: |
+        # If needed, before starting the Flask application, you can add additional steps to prepare your environment,
+        # such as setting environment variables or running database migrations.
+        cd backend/
+        python -m flask run --host=127.0.0.1 &
+        echo "FLASK_PID=$!" >> $GITHUB_ENV
+
+    - name: Wait for Flask to start
+      run: sleep 10
+
+    - name: Shutdown Flask server
+      if: always()
+      run: |
+        kill $FLASK_PID || true

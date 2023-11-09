@@ -11,14 +11,27 @@ class Order:
           self,
           price: int, 
           owner_id: int, 
-          side: Side
+          side: Side,
+          posted = None,
+          is_matched: bool = False,
+          _id = None,
       ):
-        self.id = ObjectId()
+        self.id = _id or ObjectId()
         self.price = price
         self.owner_id = owner_id
-        self.is_matched = False
-        self.posted = datetime.now()
         self.side = side
+        self.is_matched = is_matched if not is_matched else is_matched
+        self.posted = datetime.now() if not posted else posted
+        
+    @classmethod
+    def parse_from(cls, order_binary_object):
+      _id = order_binary_object['_id']
+      price = order_binary_object['price']
+      owner_id = order_binary_object['owner_id']
+      is_matched = order_binary_object['is_matched']
+      posted = order_binary_object['posted']
+      side = Side.BUY if order_binary_object['side'] == "BUY" else Side.SELL
+      return cls(price, owner_id, side, posted, is_matched, _id)
 
     def update_order(self, price):
         self.price = price

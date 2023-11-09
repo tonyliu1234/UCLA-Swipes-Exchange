@@ -30,19 +30,19 @@ class DBOperations:
     result = collection.insert_one(data)
     return result.inserted_id
 
-  def get(self, document_id):
+  def get(self, document_id, key='_id'):
     collection = self.db_connection.get_collection(self.collection_name)
-    return collection.find_one({'_id': document_id})
+    return collection.find_one({key: document_id})
 
-  def update(self, document_id, update_data):
+  def update(self, document_id, update_data, key='_id'):
     collection = self.db_connection.get_collection(self.collection_name)
     result = collection.update_one(
-        {'_id': document_id},
+        {key: document_id},
         {'$set': update_data}
     )
     return result.modified_count
 
-  def delete(self, document_id):
+  def delete(self, document_id, key='_id'):
     collection = self.db_connection.get_collection(self.collection_name)
-    result = collection.delete_one({'_id': document_id})
+    result = collection.delete_one({key: document_id})
     return result.deleted_count
