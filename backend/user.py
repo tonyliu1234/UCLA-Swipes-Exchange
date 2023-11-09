@@ -10,11 +10,13 @@ class User:
       _id = None,
       notifications = [],
       orders = [],
+      password: str
     ):
     self.id = ObjectId() if not _id else _id
     self.name = name
     self.phone = phone
     self.email = email
+    self.password = password
     self.notifications = notifications
     self.orders = orders
 
@@ -47,6 +49,7 @@ class User:
         "name": self.name,
         "phone": self.phone,
         "email": self.email,
+        "password": self.password,
         "notifications": [notification.binary_value for notification in self.notifications],  
         "orders": [order.binary_value for order in self.orders]
     }
