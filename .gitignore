@@ -1,4 +1,7 @@
+# macOS
 .DS_Store
+
+# Visual Studio Code
 .vscode
 backend/venv/
 backend/__pycache__/
