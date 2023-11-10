@@ -1,7 +1,15 @@
+from __future__ import annotations
+from typing import Optional
 from pymongo import MongoClient
 
 class DBConnection:
-    def __init__(self, host='localhost', port=27017, db_name='mydatabase'):
+    __instance: Optional[DBConnection] = None
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = super(DBConnection, cls).__new__(cls, *args, **kwargs)
+        return cls.__instance
+
+    def __init__(self, host='localhost', port=27017, db_name='ucla_swipes_exchange'):
         self.host = host
         self.port = port
         self.db_name = db_name
