@@ -40,6 +40,7 @@ class Order:
     def from_bson(cls, bson: dict):
         return cls(bson['price'], bson['owner_id'], Side(bson['side']), bson['posted'], bson['is_matched'], bson['_id'])
 
+    @property
     def to_bson(self) -> dict:
         return {
             "price": self.price,

@@ -45,6 +45,7 @@ class User(UserMixin):
         # TODO: Convert each `Order` and `Notification` to their corresponding object
         return cls(bson['name'], bson['phone'], bson['email'], bson['password'], bson['orders'], bson['notifications'], bson['_id'])
 
+    @property
     def to_bson(self):
         return {
             "_id": self.id,
@@ -54,7 +55,7 @@ class User(UserMixin):
             "password": self.password,
             # TODO: Implement `Notificationto_bson()`
             "notifications": [],
-            "orders": [order.to_bson() for order in self.orders]
+            "orders": [order.to_bson for order in self.orders]
         }
 
     @staticmethod
@@ -114,7 +115,7 @@ def register():
     hashed_password = User.hash_password(password)
     user = User(name, phone, email, hashed_password)
     try:
-        user_collection.create(user.to_bson())
+        user_collection.create(user.to_bson)
         return {'message': f'User {email} registered successfully'}, 201
     except Exception as e:
         return {'message': f'Registration failed: {e}'}, 500
