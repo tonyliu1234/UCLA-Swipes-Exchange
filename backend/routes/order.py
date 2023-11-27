@@ -69,8 +69,12 @@ class Order:
 
 
 class OrderMatchingEngine:
-    bid_queue: list[Order] = []
-    ask_queue: list[Order] = []
+    bid_queue: list[Order]
+    ask_queue: list[Order]
+
+    def __init__(self) -> None:
+        self.bid_queue = []
+        self.ask_queue = []
 
     def push(self, order: Order) -> None:
         match order.side:
