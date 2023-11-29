@@ -9,6 +9,8 @@ from bson import ObjectId
 from flask import Blueprint
 
 from monad import option
+from user import UserCollection
+from notification import Notification
 
 
 class Side(Enum):
@@ -71,10 +73,12 @@ class Order:
 class OrderMatchingEngine:
     bid_queue: list[Order]
     ask_queue: list[Order]
+    user_collection: UserCollection
 
     def __init__(self) -> None:
         self.bid_queue = []
         self.ask_queue = []
+        self.user_collection = UserCollection()
 
     def push(self, order: Order) -> None:
         match order.side:
@@ -87,7 +91,7 @@ class OrderMatchingEngine:
 
     # Matches the best bid order with the best ask order
     # whenever the highest bid price exceeds the lowest ask price
-    def match(self) -> list[Order]:
+    def __find_match(self) -> list[Order]:
         matched_orders = []
         while self.bid_queue and self.ask_queue:
             top_bid = self.bid_queue[0]
@@ -105,7 +109,22 @@ class OrderMatchingEngine:
             heappop(self.ask_queue)
 
         return matched_orders
-
+    
+    # implement the match method that generate a match and create Notification
+    # to the users
+    def match(self) -> None:
+        matched_orders = self.__find_match()
+        if matched_orders == 2: # found a match
+            bid, ask = matched_orders
+            buyer = option.unwrap(self.user_collection.get(bid.owner_id))
+            seller = option.unwrap(self.user_collection.get(ask.owner_id))
+            # create Notification
+            buyer.notifications.append(Notification(seller.id, Side.ASK))
+            seller.notifications.append(Notification(buyer.id, Side.BID))
+            # update user
+            self.user_collection.update(buyer.id, buyer.to_bson)
+            self.user_collection.update(seller.id, seller.to_bson)
+            
 
 order_route = Blueprint('order', __name__)
 order_matching_engine = OrderMatchingEngine()
