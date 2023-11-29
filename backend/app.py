@@ -5,6 +5,7 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from flask_cors import CORS
 
 from monad import option
 from routes.order import order_route
@@ -16,6 +17,9 @@ load_dotenv()
 if __name__ == '__main__':
     flask_app = Flask(__name__)
     flask_app.secret_key = option.unwrap_or(os.getenv("FLASK_SECRET_KEY"), "114514_1919810")
+    
+    cors = CORS(flask_app)
+    flask_app.config['CORS_HEADERS'] = 'Content-Type'
 
     login_manager = LoginManager()
     login_manager.init_app(flask_app)
