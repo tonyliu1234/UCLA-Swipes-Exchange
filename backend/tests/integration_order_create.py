@@ -1,0 +1,40 @@
+import requests
+
+# Base URL of the server
+base_url = 'http://127.0.0.1:5000'
+
+# Start a session to persist cookies
+session = requests.Session()
+
+def login(email, password):
+    """Log in to the server and store the session cookie."""
+    url = f'{base_url}/user/login'
+    data = {'email': email, 'password': password}
+    response = session.post(url, json=data)
+    return response.json()
+
+def create_order(price, side):
+    """Create a new order."""
+    url = f'{base_url}/order/create_order'
+    data = {'price': price, 'side': side}
+    response = session.post(url, json=data)
+    return response.json()
+
+def list_orders():
+    """List all orders."""
+    url = f'{base_url}/order/list_order'
+    response = session.get(url)
+    return response.json()
+
+# Test the API
+print("Logging in...")
+login_response = login('john@example.com', 'yourpassword')
+print("Login response:", login_response)
+
+print("\nCreating an order...")
+create_order_response = create_order(100, 'BID')
+print("Create order response:", create_order_response)
+
+print("\nListing orders...")
+list_orders_response = list_orders()
+print("List orders response:", list_orders_response)

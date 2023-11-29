@@ -8,8 +8,9 @@ from flask_login import LoginManager
 from flask_cors import CORS
 
 from monad import option
-from routes.order import order_route
-from routes.user import User, user_collection, user_route
+from routes.order_routes import order_route
+from routes.user import User
+from routes.user_routes import user_route, user_collection
 
 load_dotenv()
 

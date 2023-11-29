@@ -60,11 +60,11 @@ class Order:
     def to_bson(self) -> dict:
         return {
             "price": self.price,
-            "owner_id": self.owner_id,
+            "owner_id": str(self.owner_id),
             "side": self.side.value,
             "posted": self.posted,
             "is_matched": self.is_matched,
-            "_id": self.id,
+            "_id": str(self.id),
         }
 
 
@@ -105,22 +105,3 @@ class OrderMatchingEngine:
             heappop(self.ask_queue)
 
         return matched_orders
-
-
-order_route = Blueprint('order', __name__)
-order_matching_engine = OrderMatchingEngine()
-
-
-@order_route.route('/', methods=['GET'])
-def get_order():
-    pass
-
-
-@order_route.route('/', methods=['LIST'])
-def list_order():
-    pass
-
-
-@order_route.route('/', methods=['POST'])
-def create_order():
-    pass
