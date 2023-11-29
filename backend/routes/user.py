@@ -43,7 +43,7 @@ class User(UserMixin):
     @classmethod
     def from_bson(cls, bson: dict):
         # TODO: Convert each `Order` and `Notification` to their corresponding object
-        return cls(bson['name'], bson['phone'], bson['email'], bson['password'], bson['orders'], bson['notifications'], bson['_id'])
+        return cls(bson['name'], bson['phone'], bson['email'], bson['password'], [Order.from_bson(order) for order in bson['orders']], bson['notifications'], bson['_id'])
 
     @property
     def to_bson(self):
