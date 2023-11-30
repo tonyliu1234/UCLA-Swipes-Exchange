@@ -2,7 +2,6 @@ import hashlib
 from typing import Optional
 
 from bson import ObjectId
-from database.connection import DBCollection
 from flask import Blueprint, request
 from flask_login import (UserMixin, current_user, login_required, login_user,
                          logout_user)
@@ -11,6 +10,7 @@ from monad import option
 from routes.notification import Notification
 from routes.order import Order, Side
 from database.connection import UserCollection
+
 
 class User(UserMixin):
     name: str
@@ -81,6 +81,7 @@ class User(UserMixin):
             return self.notifications
         else:
             return self.notifications
+
 
 user_route = Blueprint('user', __name__)
 user_collection = UserCollection()
