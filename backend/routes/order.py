@@ -9,8 +9,8 @@ from bson import ObjectId
 from flask import Blueprint
 
 from monad import option
-from user import UserCollection
-from notification import Notification
+from database.connection import UserCollection
+from routes.notification import Notification
 
 
 class Side(Enum):
@@ -75,10 +75,16 @@ class OrderMatchingEngine:
     ask_queue: list[Order]
     user_collection: UserCollection
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            user_collection=None
+        ) -> None:
         self.bid_queue = []
         self.ask_queue = []
-        self.user_collection = UserCollection()
+        if user_collection is None:
+            self.user_collection = UserCollection()
+        else:
+            self.user_collection = user_collection
 
     def push(self, order: Order) -> None:
         match order.side:
@@ -91,7 +97,7 @@ class OrderMatchingEngine:
 
     # Matches the best bid order with the best ask order
     # whenever the highest bid price exceeds the lowest ask price
-    def __find_match(self) -> list[Order]:
+    def _find_match(self) -> list[Order]:
         matched_orders = []
         while self.bid_queue and self.ask_queue:
             top_bid = self.bid_queue[0]
@@ -113,13 +119,14 @@ class OrderMatchingEngine:
     # implement the match method that generate a match and create Notification
     # to the users
     def match(self) -> None:
-        matched_orders = self.__find_match()
-        if matched_orders == 2: # found a match
+        matched_orders = self._find_match()
+        if len(matched_orders) == 2: # found a match
             bid, ask = matched_orders
             buyer = option.unwrap(self.user_collection.get(bid.owner_id))
             seller = option.unwrap(self.user_collection.get(ask.owner_id))
             # create Notification
             buyer.notifications.append(Notification(seller.id, Side.ASK))
+
             seller.notifications.append(Notification(buyer.id, Side.BID))
             # update user
             self.user_collection.update(buyer.id, buyer.to_bson)

@@ -7,11 +7,10 @@ from flask import Blueprint, request
 from flask_login import (UserMixin, current_user, login_required, login_user,
                          logout_user)
 from monad import option
-from pymongo import errors
 
 from routes.notification import Notification
 from routes.order import Order, Side
-
+from database.connection import UserCollection
 
 class User(UserMixin):
     name: str
@@ -28,16 +27,16 @@ class User(UserMixin):
         phone: str,
         email: str,
         password: str,
-        orders: list[Order] = [],
-        notifications: list[Notification] = [],
+        orders: list[Order] = None,
+        notifications: list[Notification] = None,
         id: Optional[ObjectId] = None,
     ):
         self.name = name
         self.phone = phone
         self.email = email
         self.password = password
-        self.orders = orders
-        self.notifications = notifications
+        self.orders = [] if orders is None else orders
+        self.notifications = [] if notifications is None else notifications
         self.id = option.unwrap_or(id, ObjectId())
 
     @classmethod
@@ -82,36 +81,6 @@ class User(UserMixin):
             return self.notifications
         else:
             return self.notifications
-
-class UserCollection(DBCollection):
-    def __init__(self):
-        super().__init__('users')
-        # Ensure `email` is unique within the collection
-        self.collection.create_index('email', unique=True)
-
-    def get_by_email(self, email: str) -> Optional[User]:
-        return User.from_bson(self.collection.find_one({'email': email}))
-    
-    def get_by_id(self, id: ObjectId) -> Optional[User]:
-        return User.from_bson(self.collection.find_one({'_id': id}))
-
-    def update_by_email(self, email: str, data: dict) -> int:
-        # Ensure that the data doesn't try to change the email to one that already exists
-        if 'email' in data:
-            existing_user = self.get_by_email(data['email'])
-            if existing_user and existing_user['email'] != email:
-                raise errors.DuplicateKeyError(
-                    "Cannot update user: the new email is already in use by another user."
-                )
-
-        return self.collection.update_one(
-            {'email': email},
-            {'$set': data}
-        ).modified_count
-
-    def delete_by_email(self, email: str) -> int:
-        return self.collection.delete_one({'email': email}).deleted_count
-
 
 user_route = Blueprint('user', __name__)
 user_collection = UserCollection()
