@@ -36,6 +36,14 @@ def list_order():
     user_orders = user_collection.get_by_email(email)['orders']
     return jsonify(user_orders), 200
 
+@order_route.route('/list_all_order', methods=['GET'])
+@login_required
+def list_all_order():
+    cursor = user_collection.get_all_user()
+    all_orders = [doc.get('orders', []) for doc in cursor]
+    flat_all_orders = [order for user_orders in all_orders for order in user_orders]
+    return jsonify(flat_all_orders), 200
+
 @order_route.route('/create_order', methods=['POST'])
 @login_required
 def create_order():
