@@ -33,6 +33,12 @@ def get_order(id):
     response = session.get(url, json=data)
     return response.json()
 
+def list_all_orders():
+    """List all orders."""
+    url = f'{base_url}/order/list_all_order'
+    response = session.get(url)
+    return response.json()
+
 # Test the API
 print("Logging in...")
 login_response = login('john@example.com', 'yourpassword')
@@ -50,3 +56,7 @@ print("\Getting orders...")
 order_id = list_orders_response[0]['_id']
 get_orders_response = get_order(order_id)
 print("get orders response:", get_orders_response)
+
+print("\Getting ALL orders...")
+all_order_response = list_all_orders()
+print("get ALL orders response:", all_order_response)

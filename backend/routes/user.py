@@ -8,6 +8,7 @@ from flask_login import (UserMixin, current_user, login_required, login_user,
                          logout_user)
 from monad import option
 from pymongo import errors
+from pymongo.cursor import Cursor
 
 from routes.notification import Notification
 from routes.order import Order, Side
@@ -78,6 +79,9 @@ class UserCollection(DBCollection):
 
     def get_by_email(self, email: str) -> Optional[dict]:
         return self.collection.find_one({'email': email})
+    
+    def get_all_user(self) -> Optional[Cursor[dict]]:
+        return self.collection.find({})
 
     def update_by_email(self, email: str, data: dict) -> int:
         # Ensure that the data doesn't try to change the email to one that already exists
