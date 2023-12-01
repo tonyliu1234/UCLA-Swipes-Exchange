@@ -2,7 +2,7 @@
 from flask import Blueprint, request
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
-from .user import User, UserCollection
+from components.user import User, UserCollection
 
 
 user_route = Blueprint('user', __name__)

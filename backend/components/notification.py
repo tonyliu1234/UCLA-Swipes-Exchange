@@ -1,11 +1,12 @@
 from bson import ObjectId
 from typing import Optional
 from monad import option
+from .side import Side
 
 class Notification:
     id: ObjectId
     client_id: ObjectId
-    client_side: 'Side'
+    client_side: Side
 
     def __init__(self, client_id: ObjectId, client_side: 'Side', id: Optional[ObjectId] = None):
         self.client_id = client_id

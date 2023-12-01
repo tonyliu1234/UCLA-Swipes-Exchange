@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from enum import Enum
-from heapq import heappop, heappush
-from typing import Optional
-
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
-from .user import UserCollection, User
-from .order import Side, Order, OrderMatchingEngine
+from components.user import UserCollection, User
+from components.order import Side, Order
+from components.order_matching_engine import OrderMatchingEngine
 
 order_route = Blueprint('order', __name__)
 order_matching_engine = OrderMatchingEngine()

@@ -1,8 +1,10 @@
 from bson import ObjectId
-from unittest.mock import Mock, patch
-from routes.user import User
+from unittest.mock import Mock
+from components.user import User
+from components.order import Order
+from components.side import Side
 
-from routes.order import Order, OrderMatchingEngine, Side
+from components.order_matching_engine import OrderMatchingEngine
 
 
 def test_push_bid_order():
@@ -73,7 +75,5 @@ def test_match_orders():
 
     user_collection_mock.update.assert_called()
 
-    print(buyer.notifications)
-    print(seller.notifications)
     assert buyer.notifications[0].client_id == seller.id
     assert seller.notifications[0].client_id == buyer.id

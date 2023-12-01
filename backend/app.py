@@ -9,14 +9,14 @@ from flask_cors import CORS
 
 from monad import option
 from routes.order_routes import order_route
-from routes.user import User
+from components.user import User
 from routes.user_routes import user_route, user_collection
 
 load_dotenv()
 
+flask_app = Flask(__name__)
 
 if __name__ == '__main__':
-    flask_app = Flask(__name__)
     flask_app.secret_key = option.unwrap_or(os.getenv("FLASK_SECRET_KEY"), "114514_1919810")
     
     cors = CORS(flask_app)

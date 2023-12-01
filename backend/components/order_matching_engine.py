@@ -1,73 +1,11 @@
-from __future__ import annotations
-
-from datetime import datetime
-from enum import Enum
 from heapq import heappop, heappush
-from typing import Optional
 
-from bson import ObjectId
-from flask import Blueprint
-
+from .order import Order
+from .side import Side
+from .notification import Notification
+from .user import UserCollection
 from monad import option
-from database.connection import UserCollection
-from routes.notification import Notification
 
-
-class Side(Enum):
-    BID = "BID"
-    ASK = "ASK"
-
-
-class Order:
-    price: int
-    owner_id: ObjectId
-    side: Side
-    posted: datetime
-    is_matched: bool
-    id: ObjectId
-
-    def __init__(
-        self,
-        price: int,
-        owner_id: ObjectId,
-        side: Side,
-        posted: Optional[datetime] = None,
-        is_matched: bool = False,
-        id: Optional[ObjectId] = None,
-    ):
-        self.price = price
-        self.owner_id = owner_id
-        self.side = side
-        self.posted = option.unwrap_or(posted, datetime.now())
-        self.is_matched = is_matched
-        self.id = option.unwrap_or(id, ObjectId())
-
-    def __lt__(self, other: Order) -> bool:
-        if self.side != other.side:
-            raise TypeError()
-
-        match self.side:
-            case Side.BID:
-                return self.price < other.price
-            case Side.ASK:
-                return self.price > other.price
-            case _:
-                raise TypeError()
-
-    @classmethod
-    def from_bson(cls, bson: dict):
-        return cls(bson['price'], bson['owner_id'], Side(bson['side']), bson['posted'], bson['is_matched'], bson['_id'])
-
-    @property
-    def to_bson(self) -> dict:
-        return {
-            "price": self.price,
-            "owner_id": str(self.owner_id),
-            "side": self.side.value,
-            "posted": self.posted,
-            "is_matched": self.is_matched,
-            "_id": str(self.id),
-        }
 
 
 class OrderMatchingEngine:
@@ -120,7 +58,8 @@ class OrderMatchingEngine:
     # to the users
     def match(self) -> None:
         matched_orders = self._find_match()
-        if len(matched_orders) == 2: # found a match
+        # found a match
+        if len(matched_orders) == 2:
             bid, ask = matched_orders
             buyer = option.unwrap(self.user_collection.get(bid.owner_id))
             seller = option.unwrap(self.user_collection.get(ask.owner_id))
