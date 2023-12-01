@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from enum import Enum
-from heapq import heappop, heappush
-from typing import Optional
-
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
-from .user import UserCollection, User
-from .order import Side, Order, OrderMatchingEngine
+from components.user import UserCollection, User
+from components.order import Side, Order
+from components.order_matching_engine import OrderMatchingEngine
 
 order_route = Blueprint('order', __name__)
 order_matching_engine = OrderMatchingEngine()
 user_collection = UserCollection()
 
+def get_user_orders(email: str):
+    return user_collection.get_by_email(email).orders
+
 @order_route.route('/get_order', methods=['GET'])
 @login_required
 def get_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email)['orders']
-    user_orders = [Order.from_bson(order) for order in user_orders]
+    user_orders = get_user_orders(email)
     order_id = request.get_json().get('id')
 
     filtered_order = next((order for order in user_orders if str(order.id) == order_id), None)
@@ -33,7 +32,8 @@ def get_order():
 @login_required
 def list_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email)['orders']
+    user_orders = get_user_orders(email)
+    user_orders = [order.to_bson for order in user_orders]
     return jsonify(user_orders), 200
 
 @order_route.route('/list_all_order', methods=['GET'])
@@ -52,7 +52,7 @@ def create_order():
     email: str = current_user.email
     side: Side = Side(data.get('side'))
 
-    user = User.from_bson(user_collection.get_by_email(email))
+    user = user_collection.get_by_email(email)
     order = user.create_order(price, side)
     print(user.orders)
     user_collection.update_by_email(email, user.to_bson)
@@ -63,7 +63,6 @@ def create_order():
 
 def process_new_order(order: Order):
     order_matching_engine.push(order)
-    # matched_orders = order_matching_engine.match()
-    # TODO: append Notification to user's database
+    order_matching_engine.match()
 
 
