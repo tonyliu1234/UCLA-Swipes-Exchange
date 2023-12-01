@@ -2,7 +2,6 @@ import hashlib
 from typing import Optional
 
 from bson import ObjectId
-from database.connection import DBCollection
 from flask import Blueprint, request
 from flask_login import (UserMixin, current_user, login_required, login_user,
                          logout_user)
@@ -12,6 +11,7 @@ from pymongo.cursor import Cursor
 
 from routes.notification import Notification
 from routes.order import Order, Side
+from database.connection import UserCollection
 
 
 class User(UserMixin):
@@ -29,22 +29,29 @@ class User(UserMixin):
         phone: str,
         email: str,
         password: str,
-        orders: list[Order] = [],
-        notifications: list[Notification] = [],
+        orders: list[Order] = None,
+        notifications: list[Notification] = None,
         id: Optional[ObjectId] = None,
     ):
         self.name = name
         self.phone = phone
         self.email = email
         self.password = password
-        self.orders = orders
-        self.notifications = notifications
+        self.orders = [] if orders is None else orders
+        self.notifications = [] if notifications is None else notifications
         self.id = option.unwrap_or(id, ObjectId())
 
     @classmethod
     def from_bson(cls, bson: dict):
-        # TODO: Convert each `Order` and `Notification` to their corresponding object
-        return cls(bson['name'], bson['phone'], bson['email'], bson['password'], [Order.from_bson(order) for order in bson['orders']], bson['notifications'], bson['_id'])
+        return cls(
+            bson['name'],
+            bson['phone'], 
+            bson['email'], 
+            bson['password'], 
+            [Order.from_bson(order) for order in bson['orders']], 
+            [Notification.from_bson(notification) for notification in bson['notifications']], 
+            bson['_id']
+        )
 
     @property
     def to_bson(self):
@@ -54,8 +61,7 @@ class User(UserMixin):
             "phone": self.phone,
             "email": self.email,
             "password": self.password,
-            # TODO: Implement `Notificationto_bson()`
-            "notifications": [],
+            "notifications": [notification.to_bson for notification in self.notifications],
             "orders": [order.to_bson for order in self.orders]
         }
 
@@ -69,6 +75,15 @@ class User(UserMixin):
         order = Order(price, self.id, side)
         self.orders.append(order)
         return order
+    
+    def fetch_notifications(self, user_collection: 'UserCollection') -> list[Notification]:
+        new_data = user_collection.get_by_id(self.id)
+        if new_data:
+            self.notifications = new_data.notifications
+            return self.notifications
+        else:
+            return self.notifications
+
 
 
 class UserCollection(DBCollection):

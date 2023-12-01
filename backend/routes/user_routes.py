@@ -1,12 +1,7 @@
-import hashlib
-from typing import Optional
 
 from flask import Blueprint, request
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
-from monad import option
-from pymongo import errors
-
 from .user import User, UserCollection
 
 

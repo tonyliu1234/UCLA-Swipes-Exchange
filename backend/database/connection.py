@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Generic, Mapping, Optional, TypeVar
+from typing import Generic, Mapping, Optional, TypeVar
 
 from bson import ObjectId
 from monad import option
-from pymongo import MongoClient
+from pymongo import MongoClient,errors
 from pymongo.collection import Collection
 from pymongo.database import Database
-
 
 class DBConnection:
     __instance: Optional[DBConnection] = None
@@ -61,3 +60,33 @@ class DBCollection(Generic[T]):
 
     def delete(self, document_id: ObjectId) -> int:
         return self.collection.delete_one({'_id': document_id}).deleted_count
+
+
+class UserCollection(DBCollection):
+    def __init__(self):
+        super().__init__('users')
+        # Ensure `email` is unique within the collection
+        self.collection.create_index('email', unique=True)
+
+    def get_by_email(self, email: str) -> Optional['User']:
+        return User.from_bson(self.collection.find_one({'email': email}))
+
+    def get_by_id(self, id: ObjectId) -> Optional['User']:
+        return User.from_bson(self.collection.find_one({'_id': id}))
+
+    def update_by_email(self, email: str, data: dict) -> int:
+        # Ensure that the data doesn't try to change the email to one that already exists
+        if 'email' in data:
+            existing_user = self.get_by_email(data['email'])
+            if existing_user and existing_user['email'] != email:
+                raise errors.DuplicateKeyError(
+                    "Cannot update user: the new email is already in use by another user."
+                )
+
+        return self.collection.update_one(
+            {'email': email},
+            {'$set': data}
+        ).modified_count
+
+    def delete_by_email(self, email: str) -> int:
+        return self.collection.delete_one({'email': email}).deleted_count
