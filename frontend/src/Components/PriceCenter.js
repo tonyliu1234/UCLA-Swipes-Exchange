@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
+import PriceChart from './PriceChart';
 
 const PriceCenter = () => {
   return (
@@ -24,6 +25,7 @@ const PriceCenter = () => {
           <Typography variant="subtitle1">-$1.8 (-12%)</Typography>
         </Box>
       </Box>
+      <PriceChart />
       <Box
         sx={{
           display: 'flex',
