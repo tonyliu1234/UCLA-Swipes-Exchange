@@ -5,6 +5,7 @@ from bson import ObjectId
 from flask_login import UserMixin
 from monad import option
 from pymongo import errors
+from pymongo.cursor import Cursor
 
 from components.notification import Notification
 from components.order import Order
@@ -87,6 +88,9 @@ class UserCollection(DBCollection):
         super().__init__('users')
         # Ensure `email` is unique within the collection
         self.collection.create_index('email', unique=True)
+    
+    def get_all_user(self) -> Optional[Cursor[dict]]:
+        return self.collection.find({})
 
     def get_by_email(self, email: str) -> Optional[User]:
         return User.from_bson(self.collection.find_one({'email': email}))
@@ -98,7 +102,7 @@ class UserCollection(DBCollection):
         # Ensure that the data doesn't try to change the email to one that already exists
         if 'email' in data:
             existing_user = self.get_by_email(data['email'])
-            if existing_user and existing_user['email'] != email:
+            if existing_user and existing_user.email != email:
                 raise errors.DuplicateKeyError(
                     "Cannot update user: the new email is already in use by another user."
                 )

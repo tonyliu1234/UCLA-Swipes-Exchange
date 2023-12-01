@@ -14,8 +14,7 @@ user_collection = UserCollection()
 @login_required
 def get_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email)['orders']
-    user_orders = [Order.from_bson(order) for order in user_orders]
+    user_orders = user_collection.get_by_email(email).orders
     order_id = request.get_json().get('id')
 
     filtered_order = next((order for order in user_orders if str(order.id) == order_id), None)
@@ -30,7 +29,8 @@ def get_order():
 @login_required
 def list_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email)['orders']
+    user_orders = user_collection.get_by_email(email).orders
+    user_orders = [order.to_bson for order in user_orders]
     return jsonify(user_orders), 200
 
 @order_route.route('/list_all_order', methods=['GET'])
@@ -49,7 +49,7 @@ def create_order():
     email: str = current_user.email
     side: Side = Side(data.get('side'))
 
-    user = User.from_bson(user_collection.get_by_email(email))
+    user = user_collection.get_by_email(email)
     order = user.create_order(price, side)
     print(user.orders)
     user_collection.update_by_email(email, user.to_bson)
