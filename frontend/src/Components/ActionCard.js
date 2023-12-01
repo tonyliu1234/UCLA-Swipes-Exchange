@@ -13,9 +13,22 @@ const ActionCard = () => {
         }}
       >
         <Typography>Buy a swipe:</Typography>
-        <Button variant="outlined">Place Bid</Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            window.location.href = '/bid';
+          }}
+        >
+          Place Bid
+        </Button>
         <Typography>or</Typography>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            window.location.href = '/bid';
+          }}
+        >
           Buy for $10
         </Button>
       </Box>
@@ -27,11 +40,24 @@ const ActionCard = () => {
         }}
       >
         <Typography>Sell a swipe:</Typography>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            window.location.href = '/ask';
+          }}
+        >
           Sell for $7
         </Button>
         <Typography>or</Typography>
-        <Button variant="outlined">Ask for more</Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            window.location.href = '/ask';
+          }}
+        >
+          Ask for more
+        </Button>
       </Box>
     </>
   );
