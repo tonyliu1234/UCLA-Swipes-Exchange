@@ -10,11 +10,14 @@ order_route = Blueprint('order', __name__)
 order_matching_engine = OrderMatchingEngine()
 user_collection = UserCollection()
 
+def get_user_orders(email: str):
+    return user_collection.get_by_email(email).orders
+
 @order_route.route('/get_order', methods=['GET'])
 @login_required
 def get_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email).orders
+    user_orders = get_user_orders(email)
     order_id = request.get_json().get('id')
 
     filtered_order = next((order for order in user_orders if str(order.id) == order_id), None)
@@ -29,7 +32,7 @@ def get_order():
 @login_required
 def list_order():
     email: str = current_user.email
-    user_orders = user_collection.get_by_email(email).orders
+    user_orders = get_user_orders(email)
     user_orders = [order.to_bson for order in user_orders]
     return jsonify(user_orders), 200
 
@@ -60,7 +63,6 @@ def create_order():
 
 def process_new_order(order: Order):
     order_matching_engine.push(order)
-    # matched_orders = order_matching_engine.match()
-    # TODO: append Notification to user's database
+    order_matching_engine.match()
 
 
