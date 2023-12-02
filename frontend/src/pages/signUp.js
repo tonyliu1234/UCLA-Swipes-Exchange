@@ -38,10 +38,33 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    // Construct the user data object
+    const userData = {
+      name: data.get("firstName") + " " + data.get("lastName"),
       email: data.get("email"),
+      phone: data.get("phoneNumber"),
       password: data.get("password"),
-    });
+    };
+
+    // Send a POST request to the /register endpoint
+    fetch("http://127.0.0.1:5000/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle successful registration
+        console.log("Registration success:", data);
+        // Redirect to login or home page, or show success message
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Registration error:", error);
+      });
   };
 
   return (

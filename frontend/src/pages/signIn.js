@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -35,13 +36,30 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/user/login", {
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+
+      if (response.status === 200) {
+        // Redirect to the dashboard or home page
+        console.log(response.data.message);
+        // window.location.href = '/dashboard'; // Example redirection
+      }
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Error:", error.response.data.message);
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
   };
 
   return (
