@@ -49,7 +49,7 @@ def login():
         return {'message': 'Invalid credentials'}, 401
 
 
-@user_route.route('/logout')
+@user_route.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
