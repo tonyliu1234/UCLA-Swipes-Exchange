@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -36,6 +37,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const history = useHistory(); // Create an instance of useHistory
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,6 +51,7 @@ export default function SignInSide() {
 
       if (response.status === 200) {
         // Redirect to the dashboard or home page
+        history.push("/");
         console.log(response.data.message);
         // window.location.href = '/dashboard'; // Example redirection
       }
