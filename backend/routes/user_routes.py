@@ -1,13 +1,8 @@
-import hashlib
-from typing import Optional
 
 from flask import Blueprint, request
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
-from monad import option
-from pymongo import errors
-
-from .user import User, UserCollection
+from components.user import User, UserCollection
 
 
 user_route = Blueprint('user', __name__)
@@ -43,11 +38,10 @@ def login():
     if not email or not password:
         return {'message': 'Email and password are required'}, 400
 
-    user_bson = user_collection.get_by_email(email)
-    if user_bson is None:
+    user = user_collection.get_by_email(email)
+    if user is None:
         return {'message': 'User does not exist'}, 401
 
-    user = User.from_bson(user_bson)
     if user.password == User.hash_password(password):
         login_user(user)
         return {'message': 'Login successful'}, 200

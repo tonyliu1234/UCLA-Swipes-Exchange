@@ -1,96 +1,179 @@
-import React, { useState } from 'react';
-import { Typography, Box, MenuItem, FormControl, Select, InputLabel, Input, ToggleButtonGroup, ToggleButton, Button } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/styles';
+import React, { useState, useEffect } from 'react';
+import { Typography, Box, MenuItem, FormControl, Select, InputLabel, Input, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
+import styled from '@emotion/styled';
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh', // Full height of the viewport
-    width: '100vw', // Full width of the viewport
-    backgroundImage: `url(https://source.unsplash.com/random?wallpapers)`,
-    backgroundSize: 'cover', // Cover the entire viewport
-    backgroundPosition: 'center', // Center the background image
-  },
-  container: {
-    width: '50%', // Half the width of the screen
-    maxWidth: '600px', // Optional: if you want to limit how wide it can get
-    margin: '0', // No margin for centering purposes
-    padding: '16px',
-    boxShadow: '0px 3px 6px #00000029',
-    borderRadius: '4px',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust transparency here
-    backdropFilter: 'blur(8px)', // Apply a blur effect to the background content
-  },
-  // Add this inside your useStyles
-  toggleContainer: {
-    display: 'flex',
-    justifyContent: 'center', // This will center the toggle buttons wrapper div
-    alignItems: 'center',
-    margin: '0 auto', // Centers the container itself if needed
-    width: '100%', // Ensures the container takes the full width
-    marginBottom: '2Rem',
-    marginTop: '1.2Rem',
-  },
+const Root = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  width: 100vw; 
+  background-image: url(https://source.unsplash.com/random?wallpapers);
+  background-size: cover;
+  background-position: center;
+`;
 
-  input: {
-    flex: 1,
-    margin: '8px',
-  },
-});
+const Container = styled.div`
+  width: 50%;
+  max-width: 600px;
+  margin: 0;
+  padding: 16px;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+`;
 
-const StyledToggleButtonGroup = withStyles({
-  grouped: {
-    margin: '8px',
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: '20px',
-    },
-    '&:first-child': {
-      borderRadius: '20px',
-    },
-    // Flexbox properties to center the buttons
-    display: 'flex', 
-    justifyContent: 'center', // This centers the buttons horizontally in the container
-    height: '2.4Rem',
-    width: '18Rem'
-  },
-})(ToggleButtonGroup);
+const ToggleContainer = styled.div`
+  display: flex;
+  justifyContent: center;
+  alignItems: ;center;
+  margin: 0 auto;
+  width: 100%;
+  marginBottom: 2Rem;
+  marginTop: 1.2Rem;
+`;
 
-const StyledToggleButton = withStyles({
-  root: {
-    border: '1px solid #c4c4c4',
-    '&.Mui-selected': {
-      backgroundColor: '#000',
-      color: '#fff',
-      '&:hover': {
-        backgroundColor: '#000',
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)`
+  .MuiToggleButtonGroup-grouped {
+    margin: 8px;
+    border: none;
+    &:not(:first-child) {
+      border-radius: 20px;
+    }
+    &:first-child {
+      border-radius: 20px;
+    }
+    display: flex;
+    justify-content: center;
+    height: 2.4rem;
+    width: 18rem;
+  }
+`;
+
+const StyledToggleButton = styled(ToggleButton)`
+  border: 1px solid #c4c4c4;
+  &.Mui-selected {
+    background-color: #000;
+    color: #fff;
+    &:hover {
+      background-color: #000;
+    }
+  }
+  text-align: center;
+  line-height: 40px;
+`;
+
+const fetchOrderStats = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/orders', { // Adjust the URL to where your orders are fetched from
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    },
-    // Text alignment properties to center text inside the button
-    textAlign: 'center', 
-    lineHeight: '40px', // Adjust the line height to match your button's height
-  },
-})(ToggleButton);
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const orders = await response.json();
+    
+    // Process orders to calculate stats
+    let askCount = 0;
+    let largestBidPrice = 0;
+
+    orders.forEach(order => {
+      if (order.side === 'ASK') {
+        askCount++;
+      }
+      if (order.side === 'BID' && order.price > largestBidPrice) {
+        largestBidPrice = order.price;
+      }
+    });
+
+    return { totalAsks: askCount, largestBid: largestBidPrice || 0 };
+  } catch (error) {
+    console.error('Error fetching order stats:', error);
+  }
+};
+
+
+const submitAskOrder = async (price, size) => {
+  const order = {
+    price: price,
+    size: size, // Size is assumed to be a part of the order, based on your frontend
+    // Other fields as required by your backend
+  };
+
+  try {
+    const response = await fetch('http://localhost:5000', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error submitting ask order:', error);
+  }
+}
+
+
+
 
 
 const AskOrder = () => {
+  const [price, setPrice] = useState(10);
+  const [size, setSize] = useState('');
+
+  const [totalAsks, setTotalAsks] = useState(0);
+  const [largestBid, setLargestBid] = useState(0);
   const [alignment, setAlignment] = useState('left');
-  const classes = useStyles();
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
 
+  useEffect(() => {
+    fetchOrderStats().then(stats => {
+      if (stats) {
+        setTotalAsks(stats.totalAsks);
+        setLargestBid(stats.largestBid);
+        // Now you have totalAsks and largestBid to use in your UI
+      }
+      if (alignment === 'right') { // 'right' corresponds to 'Sell Now'
+        setPrice(20); // Set price to the largest bid
+      } else {
+        setPrice(0);
+      }
+    });
+  }, [alignment, largestBid]);
+
+  const handleSubmit = () => {
+    // Assuming you have state variables for price and size
+    submitAskOrder(price, size).then(response => {
+      // Handle response, maybe clear the form or show a success message
+      console.log('Order submitted:', response);
+    });
+    setPrice('');
+    setSize('');
+  }
+  
+
   return (
-    <Box className={classes.root}>
-    <Box className={classes.container}>
+    <Root>
+    <Container>
       <Typography variant="subtitle1" gutterBottom>
-        Inventory is High, Act Fast - There are 16 asks on this item.
+        Inventory is High, Act Fast - There are {totalAsks} asks on this item.
       </Typography>
       <Typography variant="h6">Size: US XL</Typography>
-      <div className={classes.toggleContainer}> {/* Wrap your StyledToggleButtonGroup with a div */}
+      <ToggleContainer> {/* Wrap your StyledToggleButtonGroup with a div */}
       <StyledToggleButtonGroup
         size="large"
         value={alignment}
@@ -105,12 +188,12 @@ const AskOrder = () => {
           Sell Now
         </StyledToggleButton>
       </StyledToggleButtonGroup>
-    </div>
-      <FormControl fullWidth className={classes.input}>
+    </ToggleContainer>
+      <FormControl fullWidth>
         <InputLabel htmlFor="price">Price</InputLabel>
-        <Input id="price" style={{marginBottom: '2Rem'}} startAdornment={<Typography variant="h6">$</Typography>} />
+        <Input id="price" style={{marginBottom: '2Rem'}} startAdornment={<Typography variant="h6">${price}</Typography>} />
       </FormControl>
-      <FormControl fullWidth className={classes.input}>
+      <FormControl fullWidth>
         <InputLabel id="ask-expiration-label">Ask Expiration</InputLabel>
         <Select
           labelId="ask-expiration-label"
@@ -123,12 +206,12 @@ const AskOrder = () => {
       </FormControl>
       <Box display="flex" justifyContent="space-between" my={2}>
         <Button variant="text" style={{color: 'black'}}>Cancel</Button>
-        <Button variant="contained" color="grey">
+        <Button variant="contained" color="grey" onClick={handleSubmit}>
           Submit
         </Button>
       </Box>
-    </Box>
-    </Box>
+    </Container>
+    </Root>
   );
 };
 
