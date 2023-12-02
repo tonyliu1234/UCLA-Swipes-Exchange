@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
-const ActionCard = () => {
+const ActionCard = ({ orders }) => {
+  const [lowestAsk, setLowestAsk] = useState(-1);
+  const [highestBid, setHighestBid] = useState(-1);
+
+  useEffect(() => {
+    let minAsk = Number.MAX_VALUE;
+    let maxBid = Number.MIN_VALUE;
+
+    orders.forEach(({ price, side }) => {
+      if (side === 'ASK') {
+        minAsk = Math.min(minAsk, price);
+      }
+      if (side === 'BID') {
+        maxBid = Math.max(maxBid, price);
+      }
+    });
+
+    if (minAsk !== Number.MAX_VALUE) {
+      setLowestAsk(minAsk);
+    }
+    if (maxBid !== Number.MIN_VALUE) {
+      setHighestBid(maxBid);
+    }
+  }, [orders]);
+
   return (
     <>
       <Box
@@ -13,10 +37,23 @@ const ActionCard = () => {
         }}
       >
         <Typography>Buy a swipe:</Typography>
-        <Button variant="outlined">Place Bid</Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            window.location.href = '/bid';
+          }}
+        >
+          Place Bid
+        </Button>
         <Typography>or</Typography>
-        <Button variant="contained" color="primary">
-          Buy for $10
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            window.location.href = '/bid';
+          }}
+        >
+          {lowestAsk === -1 ? 'No asks now' : 'Buy for $' + lowestAsk}
         </Button>
       </Box>
       <Box
@@ -27,11 +64,24 @@ const ActionCard = () => {
         }}
       >
         <Typography>Sell a swipe:</Typography>
-        <Button variant="contained" color="primary">
-          Sell for $7
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            window.location.href = '/ask';
+          }}
+        >
+          {highestBid === -1 ? 'No bids now' : 'Sell for $' + highestBid}
         </Button>
         <Typography>or</Typography>
-        <Button variant="outlined">Ask for more</Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            window.location.href = '/ask';
+          }}
+        >
+          Ask for more
+        </Button>
       </Box>
     </>
   );
