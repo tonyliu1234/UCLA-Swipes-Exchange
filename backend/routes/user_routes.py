@@ -59,4 +59,12 @@ def logout():
 @user_route.route('/whoami')
 @login_required
 def whoami():
-    return {'message': f"{current_user.email}"}, 200
+    user = user_collection.get_by_email(current_user.email)
+    
+    user_data = {
+        'phone': user.phone,
+        'name': user.name,
+        'email': user.email
+    }
+
+    return user_data, 200
