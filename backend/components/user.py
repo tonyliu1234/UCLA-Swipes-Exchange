@@ -28,8 +28,8 @@ class User(UserMixin):
         phone: str,
         email: str,
         password: str,
-        orders: list[Order] = None,
-        notifications: list[Notification] = None,
+        orders: Optional[list[Order]] = None,
+        notifications: Optional[list[Notification]] = None,
         id: Optional[ObjectId] = None,
     ):
         self.name = name
@@ -44,11 +44,11 @@ class User(UserMixin):
     def from_bson(cls, bson: dict):
         return cls(
             bson['name'],
-            bson['phone'], 
-            bson['email'], 
-            bson['password'], 
-            [Order.from_bson(order) for order in bson['orders']], 
-            [Notification.from_bson(notification) for notification in bson['notifications']], 
+            bson['phone'],
+            bson['email'],
+            bson['password'],
+            [Order.from_bson(order) for order in bson['orders']],
+            [Notification.from_bson(notification) for notification in bson['notifications']],
             bson['_id']
         )
 
@@ -74,7 +74,7 @@ class User(UserMixin):
         order = Order(price, self.id, side)
         self.orders.append(order)
         return order
-    
+
     def fetch_notifications(self, user_collection: 'UserCollection') -> list[Notification]:
         new_data = user_collection.get_by_id(self.id)
         if new_data:
@@ -88,15 +88,15 @@ class UserCollection(DBCollection):
         super().__init__('users')
         # Ensure `email` is unique within the collection
         self.collection.create_index('email', unique=True)
-    
+
     def get_all_user(self) -> Optional[Cursor[dict]]:
         return self.collection.find({})
 
     def get_by_email(self, email: str) -> Optional[User]:
-        return User.from_bson(self.collection.find_one({'email': email}))
+        return option.and_then(self.collection.find_one({'email': email}), User.from_bson)
 
     def get_by_id(self, id: ObjectId) -> Optional[User]:
-        return User.from_bson(self.collection.find_one({'_id': id}))
+        return option.and_then(self.collection.find_one({'_id': id}), User.from_bson)
 
     def update_by_email(self, email: str, data: dict) -> int:
         # Ensure that the data doesn't try to change the email to one that already exists
