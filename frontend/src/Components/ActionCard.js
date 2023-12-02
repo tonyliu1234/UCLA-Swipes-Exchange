@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
-const ActionCard = () => {
+const ActionCard = ({ orders }) => {
+  const [lowestAsk, setLowestAsk] = useState(-1);
+  const [highestBid, setHighestBid] = useState(-1);
+
+  useEffect(() => {
+    let minAsk = Number.MAX_VALUE;
+    let maxBid = Number.MIN_VALUE;
+
+    orders.forEach(({ price, side }) => {
+      if (side === 'ASK') {
+        minAsk = Math.min(minAsk, price);
+      }
+      if (side === 'BID') {
+        maxBid = Math.max(maxBid, price);
+      }
+    });
+
+    if (minAsk !== Number.MAX_VALUE) {
+      setLowestAsk(minAsk);
+    }
+    if (maxBid !== Number.MIN_VALUE) {
+      setHighestBid(maxBid);
+    }
+  }, [orders]);
+
   return (
     <>
       <Box
@@ -29,7 +53,7 @@ const ActionCard = () => {
             window.location.href = '/bid';
           }}
         >
-          Buy for $10
+          {lowestAsk === -1 ? 'No asks now' : 'Buy for $' + lowestAsk}
         </Button>
       </Box>
       <Box
@@ -47,7 +71,7 @@ const ActionCard = () => {
             window.location.href = '/ask';
           }}
         >
-          Sell for $7
+          {highestBid === -1 ? 'No bids now' : 'Sell for $' + highestBid}
         </Button>
         <Typography>or</Typography>
         <Button
