@@ -4,7 +4,7 @@ import userProfile from "./pages/userProfile";
 import signIn from "./pages/signIn";
 import signUp from "./pages/signUp";
 import changeUserProfile from "./pages/changeUserProfile";
-import Home from './pages/Home';
+import Home from "./pages/Home";
 
 function App() {
   return (
