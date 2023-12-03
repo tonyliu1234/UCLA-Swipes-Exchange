@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -27,6 +27,64 @@ export default function UserProfile() {
     // Use the correct path to your "changeUserProfile" page
     history.push("./changeUserProfile");
   };
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/user/logout", {
+        method: "POST",
+        credentials: "include", // Correct value for credentials
+      });
+
+      if (response.status === 200) {
+        // Redirect to login page or update UI state
+        history.push("/signIn");
+      } else {
+        // Attempt to read JSON response
+        try {
+          const data = await response.json();
+          console.error("Logout failed:", data.message);
+        } catch {
+          // Handle non-JSON response
+          console.error("Logout failed: Non-JSON response received");
+        }
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  // Step 1: State for storing user data
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  // Step 2: Fetching data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/user/whoami", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserData({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+          });
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <Box sx={{ display: "flex", p: 2 }}>
       <Grid container spacing={2} sx={{ height: "100vh" }}>
@@ -81,7 +139,7 @@ export default function UserProfile() {
                 secondary="Change Profile Details"
               />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={handleLogout}>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
@@ -110,31 +168,25 @@ export default function UserProfile() {
                   <Typography variant="body1">
                     <strong>Name</strong>
                   </Typography>
-                  <Typography variant="body2">Jeffrey Yu</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body1">
-                    <strong>UCLA ID</strong>
-                  </Typography>
-                  <Typography variant="body2">000000000</Typography>
+                  <Typography variant="body2">{userData.name}</Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="body1">
                     <strong>Username</strong>
                   </Typography>
-                  <Typography variant="body2">sneakerhead6321!</Typography>
+                  <Typography variant="body2">{userData.name}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body1">
+                    <strong>Email Address</strong>
+                  </Typography>
+                  <Typography variant="body2">{userData.email}</Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="body1">
                     <strong>Phone Number</strong>
                   </Typography>
-                  <Typography variant="body2">(213) 468-2703</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    <strong>Email Address</strong>
-                  </Typography>
-                  <Typography variant="body2">y239781702@gmail.com</Typography>
+                  <Typography variant="body2">{userData.phone}</Typography>
                 </Grid>
               </Grid>
             </CardContent>
