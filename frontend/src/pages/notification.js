@@ -11,10 +11,16 @@ import {
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { Button } from "@mui/material";
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const useMockData = true; // Set to false to fetch data from the API
+  const history = useHistory();
+  const handleCancelClick = () => {
+    history.push("/userProfile");
+  };
 
   useEffect(() => {
     if (useMockData) {
@@ -53,6 +59,9 @@ function NotificationsPage() {
       <Typography variant="h4" gutterBottom>
         Notifications
       </Typography>
+      <Button variant="outlined" color="primary" onClick={handleCancelClick}>
+        Back to Profile
+      </Button>
       <List>
         {notifications.length === 0 ? (
           <ListItem>
