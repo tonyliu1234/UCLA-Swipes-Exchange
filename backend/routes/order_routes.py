@@ -54,7 +54,7 @@ def create_order():
 
     user = user_collection.get_by_email(email)
     order = user.create_order(price, side)
-    print(user.orders)
+
     user_collection.update_by_email(email, user.to_bson)
 
     # TODO: Use Message Queue (Extremely Low Priority)
