@@ -68,3 +68,12 @@ def whoami():
     }
 
     return user_data, 200
+
+@user_route.route('/delete_user',  methods=['DELETE'])
+@login_required
+def delete_user():
+    delete_count = user_collection.delete_by_email(current_user.email)
+    if delete_count == 0:
+        return {'message': 'Delete user failed: User not found'}, 500
+    logout_user()
+    return {'message': 'Delete user successfully'}, 200
