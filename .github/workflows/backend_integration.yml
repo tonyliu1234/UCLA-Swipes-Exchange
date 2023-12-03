@@ -1,6 +1,6 @@
 name: Backend Integration Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-        - name: Set up MongoDB Database
+    - name: Set up MongoDB Database
       run: |
         # Connect to MongoDB and create database and collection
         docker run --network host --rm mongo:4.4 mongo --eval 'db.createCollection("user")' --host localhost ucla_swipes_exchange
