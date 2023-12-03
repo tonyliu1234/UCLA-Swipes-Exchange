@@ -3,14 +3,8 @@ name: Backend Integration Tests
 on: [pull_request]
 
 jobs:
-  integration-test:
+  test:
     runs-on: ubuntu-latest
-
-    services:
-      mongodb:
-        image: mongo
-        ports:
-          - 27017:27017
 
     steps:
     - name: Check out repository code
@@ -19,7 +13,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  # Specify your Python version
+        python-version: '3.8'  # Adjust as per your Python version
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: '4.4'  # Specify MongoDB version
 
     - name: Install dependencies
       run: |
@@ -27,18 +26,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up MongoDB Database
+        - name: Set up MongoDB Database
       run: |
-        docker run --network host mongo mongo --eval 'use ucla_swipes_exchange' --host localhost
-        docker run --network host mongo mongo --eval 'db.createCollection("user")' --host localhost
+        # Connect to MongoDB and create database and collection
+        docker run --network host --rm mongo:4.4 mongo --eval 'db.createCollection("user")' --host localhost ucla_swipes_exchange
 
     - name: Run Integration Tests
       run: |
-        cd backend/tests/
+        cd backend/test/
         chmod +x run_test.sh
         ./run_test.sh
-
-    - name: Clean up
-      if: always()
-      run: |
-        # Any cleanup steps if needed
