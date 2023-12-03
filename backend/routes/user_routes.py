@@ -72,7 +72,7 @@ def profile_change():
             and user_collection.get_by_email(email) is not None
         )
 
-    user = user_collection.get(current_user.id)
+    user = User.from_bson(user_collection.get(current_user.id))
     data = request.get_json()
 
     for attr in ["name", "phone"]:
