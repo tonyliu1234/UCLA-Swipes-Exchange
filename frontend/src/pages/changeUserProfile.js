@@ -1,5 +1,6 @@
 // changeUserProfile.js
-import React from "react";
+import React, { useState } from "react";
+
 import {
   Box,
   Container,
@@ -23,6 +24,56 @@ const ChangeUserProfile = () => {
     history.push("./userProfile");
   };
 
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    phone: "",
+    uid: "",
+    email: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("/user/update_profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`,
+          phone: formData.phone,
+          email: formData.email,
+          // include other fields as necessary
+        }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        // Handle success
+        alert("Profile updated successfully");
+        history.push("./userProfile");
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        alert(`Update failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("An error occurred while updating the profile");
+    }
+  };
+
   return (
     <Container component="main" maxWidth="sm">
       <Box
@@ -39,7 +90,7 @@ const ChangeUserProfile = () => {
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
           Change your profile settings
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }}>
+        <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -49,6 +100,8 @@ const ChangeUserProfile = () => {
             name="firstName"
             autoComplete="given-name"
             autoFocus
+            value={formData.firstName}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -58,6 +111,8 @@ const ChangeUserProfile = () => {
             label="Last Name"
             name="lastName"
             autoComplete="family-name"
+            value={formData.lastName}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -66,6 +121,8 @@ const ChangeUserProfile = () => {
             id="username"
             label="Username"
             name="username"
+            value={formData.username}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -75,6 +132,8 @@ const ChangeUserProfile = () => {
             label="Phone Number"
             name="phone"
             type="tel"
+            value={formData.phone}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -83,7 +142,9 @@ const ChangeUserProfile = () => {
             id="uid"
             label="UCLA ID"
             name="uid"
-            type="uid"
+            type="text"
+            value={formData.uid}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -92,7 +153,9 @@ const ChangeUserProfile = () => {
             id="email"
             label="Email Address"
             name="email"
-            type="enauk"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
           />
 
           <Box
@@ -107,17 +170,11 @@ const ChangeUserProfile = () => {
               type="button"
               variant="outlined"
               sx={{ mt: 3, mb: 2 }}
-              // Here you would handle the cancel action
               onClick={handleCancelClick}
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              // Here you would handle the submit action
-            >
+            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
               Submit
             </Button>
           </Box>
@@ -126,5 +183,4 @@ const ChangeUserProfile = () => {
     </Container>
   );
 };
-
 export default ChangeUserProfile;
