@@ -17,6 +17,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SellIcon from "@mui/icons-material/Sell";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import NotificationsIcon from "@mui/icons-material/Notifications"; // Import Notifications icon
 import EditIcon from "@mui/icons-material/Edit"; // import Edit icon
 import { useHistory } from "react-router-dom";
 
@@ -27,6 +28,11 @@ export default function UserProfile() {
     // Use the correct path to your "changeUserProfile" page
     history.push("./changeUserProfile");
   };
+
+  const handleNotifiacationClick = () => {
+    history.push("./notification");
+  };
+
   const handleLogout = async () => {
     try {
       const response = await fetch("/user/logout", {
@@ -105,13 +111,13 @@ export default function UserProfile() {
           </Typography>
           <Divider />
           <List>
-            <ListItem button>
+            <ListItem button sx={{ py: 2 }}>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>
-            <ListItem button>
+            <ListItem button sx={{ py: 2 }}>
               <ListItemIcon>
                 <ShoppingCartIcon />
               </ListItemIcon>
@@ -120,7 +126,7 @@ export default function UserProfile() {
                 secondary="Active Bids, In-Progress, Completed Orders"
               />
             </ListItem>
-            <ListItem button>
+            <ListItem button sx={{ py: 2 }}>
               <ListItemIcon>
                 <SellIcon />
               </ListItemIcon>
@@ -129,17 +135,21 @@ export default function UserProfile() {
                 secondary="Active Asks, In-Progress, Completed Sales"
               />
             </ListItem>
+
             {/* Add an edit profile button */}
-            <ListItem button onClick={handleEditProfileClick}>
+            <ListItem button onClick={handleEditProfileClick} sx={{ py: 2 }}>
               <ListItemIcon>
                 <EditIcon />
               </ListItemIcon>
-              <ListItemText
-                primary="Edit Profile"
-                secondary="Change Profile Details"
-              />
+              <ListItemText primary="Edit Profile" />
             </ListItem>
-            <ListItem button onClick={handleLogout}>
+            <ListItem button onClick={handleNotifiacationClick} sx={{ py: 2 }}>
+              <ListItemIcon>
+                <NotificationsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Notification" />
+            </ListItem>
+            <ListItem button onClick={handleLogout} sx={{ py: 2 }}>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
