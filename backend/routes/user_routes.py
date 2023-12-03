@@ -70,6 +70,30 @@ def whoami():
 
     return user_data, 200
 
+@user_route.route('/update_profile',  methods=['POST'])
+@login_required
+def profile_change():
+    def email_already_in_use(email):
+        return email != current_user.email and user_collection.get_by_email(email) is not None
+    user = user_collection.get_by_email(current_user.email)
+    data = request.get_json()
+
+    for attr in ['name', 'phone']:
+        if attr_value := data.get(attr):
+            setattr(user, attr, attr_value)
+
+    if 'email' in data and email_already_in_use(data['email']):
+        return {'message': 'Email already in use'}, 409
+
+    if email := data.get('email'):
+        user.email = email
+
+    if password := data.get('password'):
+        user.password = User.hash_password(password)
+    
+    user_collection.update_by_email(email, user.to_bson)
+    return {'message': 'User profile updated successfully'}, 200
+
 @user_route.route('/delete_user',  methods=['DELETE'])
 @login_required
 def delete_user():
