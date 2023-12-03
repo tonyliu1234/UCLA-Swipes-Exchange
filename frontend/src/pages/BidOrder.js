@@ -163,9 +163,8 @@ const BidOrder = () => {
     <Root>
       <Container>
         <Typography variant="subtitle1" gutterBottom>
-          High Demand - {totalBids} people are interested in this product
+          High Demand - {totalBids} bids are there!
         </Typography>
-        <Typography variant="h6">Size: US XL</Typography>
         <ToggleContainer>
           <ToggleButtonGroup
             value={selectedPrice}

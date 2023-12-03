@@ -188,9 +188,8 @@ const AskOrder = () => {
     <Root>
     <Container>
       <Typography variant="subtitle1" gutterBottom>
-        Inventory is High, Act Fast - There are {totalAsks} asks on this item.
+        Inventory is High, Act Fast - There are {totalAsks} asks for the swipes!
       </Typography>
-      <Typography variant="h6">Size: US XL</Typography>
       <ToggleContainer> {/* Wrap your StyledToggleButtonGroup with a div */}
       <StyledToggleButtonGroup
         size="large"
