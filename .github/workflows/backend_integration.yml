@@ -1,9 +1,9 @@
 name: Backend Integration Tests
 
-on: [pull_request]
+on: [push]
 
 jobs:
-  integration-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
