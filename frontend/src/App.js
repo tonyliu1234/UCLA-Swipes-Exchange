@@ -8,6 +8,8 @@ import AskOrder from "./pages/AskOrder";
 import BidOrder from "./pages/BidOrder";
 import Home from "./pages/Home";
 import Notification from "./pages/notification";
+import AsksPage from "./pages/AsksPage";
+import BidsPage from "./pages/BidsPage";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/bid" component={BidOrder} />
         <Route exact path="/" component={Home} />
         <Route path="/notification" component={Notification} />
+        <Route path="/AsksPage" component={AsksPage} />
+        <Route path="/BidsPage" component={BidsPage} />
       </Switch>
     </Router>
   );

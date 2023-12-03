@@ -33,6 +33,14 @@ export default function UserProfile() {
     history.push("./notification");
   };
 
+  const handleBuyingClick = () => {
+    history.push("./AsksPage");
+  };
+
+  const handleSellingClick = () => {
+    history.push("./BidsPage");
+  };
+
   const handleLogout = async () => {
     try {
       const response = await fetch("/user/logout", {
@@ -117,7 +125,7 @@ export default function UserProfile() {
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>
-            <ListItem button sx={{ py: 2 }}>
+            <ListItem button onClick={handleBuyingClick} sx={{ py: 2 }}>
               <ListItemIcon>
                 <ShoppingCartIcon />
               </ListItemIcon>
@@ -126,7 +134,7 @@ export default function UserProfile() {
                 secondary="Active Bids, In-Progress, Completed Orders"
               />
             </ListItem>
-            <ListItem button sx={{ py: 2 }}>
+            <ListItem button onClick={handleSellingClick} sx={{ py: 2 }}>
               <ListItemIcon>
                 <SellIcon />
               </ListItemIcon>
