@@ -63,9 +63,21 @@ class OrderMatchingEngine:
             bid, ask = matched_orders
             buyer = option.unwrap(self.user_collection.get(bid.owner_id))
             seller = option.unwrap(self.user_collection.get(ask.owner_id))
+            
+            # update user's order
+            def mark_order_as_matched(user, order):
+                new_orders = []
+                for user_order in user.orders:
+                    if user_order.id == order.id:
+                        user_order.is_matched = True
+                    new_orders.append(user_order)
+                user.orders = new_orders
+            
+            mark_order_as_matched(buyer, bid)
+            mark_order_as_matched(seller, ask)
+            
             # create Notification
             buyer.notifications.append(Notification(seller.id, Side.ASK))
-
             seller.notifications.append(Notification(buyer.id, Side.BID))
             # update user
             self.user_collection.update(buyer.id, buyer.to_bson)

@@ -1,8 +1,9 @@
 
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
 from components.user import User, UserCollection
+from monad import option
 
 
 user_route = Blueprint('user', __name__)
@@ -77,3 +78,12 @@ def delete_user():
         return {'message': 'Delete user failed: User not found'}, 500
     logout_user()
     return {'message': 'Delete user successfully'}, 200
+
+@user_route.route('/notifications', methods=['GET'])
+@login_required
+def get_notifications():
+    user = user_collection.get_by_email(current_user.email)
+    if user is None:
+        return {'message': 'User not found'}, 404
+    notifications = [notification.to_bson for notification in user.notifications]
+    return jsonify(notifications), 200
