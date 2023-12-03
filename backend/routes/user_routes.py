@@ -72,7 +72,7 @@ def profile_change():
             and user_collection.get_by_email(email) is not None
         )
 
-    user = user_collection.get_by_email(current_user.email)
+    user = User.from_bson(user_collection.get(current_user.id))
     data = request.get_json()
 
     for attr in ["name", "phone"]:
@@ -88,8 +88,8 @@ def profile_change():
     if password := data.get("password"):
         user.password = User.hash_password(password)
 
-    user_collection.update_by_email(email, user.to_bson)
-    return {"message": "User profile updated successfully"}, 200
+    user_collection.update(user.id, user.to_bson)
+    return {'message': 'User profile updated successfully'}, 200
 
 
 @user_route.route("/delete_user", methods=["DELETE"])
