@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import styled from '@emotion/styled';
 import { Button, Box, MenuItem, FormControl, Select, InputLabel, TextField, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
@@ -49,7 +50,7 @@ const StyledToggleButton = styled(ToggleButton)`
 
 const fetchBidStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/orders', {
+      const response = await fetch('/order/list_all_order', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -68,6 +69,7 @@ const fetchBidStats = async () => {
         if (order.side === 'BID') {
           bidCount++;
         }
+        console.log(order.price)
         if (order.side === 'ASK' && order.price < lowestAskPrice) {
           lowestAskPrice = order.price;
         }
@@ -86,6 +88,12 @@ const BidOrder = () => {
     const [currentPrice, setCurrentPrice] = useState(null);
     const [selectedPrice, setSelectedPrice] = useState(null);
 
+    const history = useHistory();
+  
+    const handleCancel = () => {
+      history.push('/'); // Navigate to the root or another desired route
+    };
+
     const handlePriceSelection = (event, newPrice) => {
         setSelectedPrice(newPrice);
     };
@@ -95,29 +103,44 @@ const BidOrder = () => {
         if (stats) {
           setTotalBids(stats.totalBids);
           setLowestAsk(stats.lowestAsk);
+          setSelectedPrice(stats.lowestAsk);
         }
       });
     }, []);
     
     useEffect(() => {
-      if (selectedPrice === 70) { // Assuming 70 is the 'Buy Now' price
+      if (selectedPrice === lowestAsk) { // Assuming 70 is the 'Buy Now' price
         setCurrentPrice(lowestAsk);
       } else if (selectedPrice === 51 || selectedPrice === 56) { // Good Bid or Better Bid
         setCurrentPrice(selectedPrice);
       }
     }, [selectedPrice, lowestAsk]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
+      const intPrice = parseInt(currentPrice, 10);
+      if (!isNaN(intPrice)) {
+        submitBidOrder(intPrice).then(response => {
+          alert('Successfully created order!');
+          history.push('/');
+        }).catch(error => {
+          console.error('Error submitting bid order:', error);
+        });
+      } else {
+        console.error('Invalid price value');
+      }
+    }
+
+    const submitBidOrder = async (price) => {
         // Assuming you have a state variable for the bid price and expiration
         const bidOrder = {
-          price: currentPrice,
+          price: price,
           owner_id: 'ownerId', // You need to get the actual owner's ID
           side: 'BID',
           // Include other necessary fields
         };
       
         try {
-          const response = await fetch('http://localhost:5000/orders', {
+          const response = await fetch('/order/create_order', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -157,22 +180,14 @@ const BidOrder = () => {
             <StyledToggleButton value={56} aria-label="better bid">
               $56 Better Bid
             </StyledToggleButton>
-            <StyledToggleButton value={70} aria-label="buy now">
+            <StyledToggleButton value={lowestAsk} aria-label="buy now">
               ${lowestAsk} Buy Now
             </StyledToggleButton>
           </ToggleButtonGroup>
         </ToggleContainer>
         <TextField label="Or Name Your Price" style={{ marginBottom: '2rem' }} value={currentPrice || ''} fullWidth margin="normal" onChange={e => setCurrentPrice(e.target.value)} />
-        <FormControl fullWidth>
-          <InputLabel>Bid Expiration</InputLabel>
-          <Select defaultValue={30}>
-            <MenuItem value={30}>30 Days</MenuItem>
-            <MenuItem value={60}>60 Days</MenuItem>
-            <MenuItem value={90}>90 Days</MenuItem>
-          </Select>
-        </FormControl>
         <Box display="flex" justifyContent="space-between" my={2}>
-          <Button variant="text" style={{color: 'black'}}>Cancel</Button>
+          <Button variant="text" style={{color: 'black'}} onClick={handleCancel}>Cancel</Button>
           <Button variant="contained" color="grey" onClick={handleSubmit}>
             Place Bid
           </Button>
