@@ -1,11 +1,11 @@
 from heapq import heappop, heappush
 
-from .order import Order
-from .side import Side
-from .notification import Notification
-from .user import UserCollection
 from monad import option
 
+from .notification import Notification
+from .order import Order
+from .side import Side
+from .user import UserCollection
 
 
 class OrderMatchingEngine:
@@ -13,10 +13,7 @@ class OrderMatchingEngine:
     ask_queue: list[Order]
     user_collection: UserCollection
 
-    def __init__(
-            self,
-            user_collection=None
-        ) -> None:
+    def __init__(self, user_collection=None) -> None:
         self.bid_queue = []
         self.ask_queue = []
         if user_collection is None:
@@ -63,7 +60,7 @@ class OrderMatchingEngine:
             bid, ask = matched_orders
             buyer = option.unwrap(self.user_collection.get(bid.owner_id))
             seller = option.unwrap(self.user_collection.get(ask.owner_id))
-            
+
             # update user's order
             def mark_order_as_matched(user, order):
                 new_orders = []
@@ -72,10 +69,10 @@ class OrderMatchingEngine:
                         user_order.is_matched = True
                     new_orders.append(user_order)
                 user.orders = new_orders
-            
+
             mark_order_as_matched(buyer, bid)
             mark_order_as_matched(seller, ask)
-            
+
             # create Notification
             buyer.notifications.append(Notification(seller.id, Side.ASK))
             seller.notifications.append(Notification(buyer.id, Side.BID))

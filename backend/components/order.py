@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-
 from typing import Optional
 
 from bson import ObjectId
@@ -9,6 +8,7 @@ from bson import ObjectId
 from monad import option
 
 from .side import Side
+
 
 class Order:
     price: int
@@ -48,7 +48,14 @@ class Order:
 
     @classmethod
     def from_bson(cls, bson: dict):
-        return cls(bson['price'], bson['owner_id'], Side(bson['side']), bson['posted'], bson['is_matched'], bson['_id'])
+        return cls(
+            bson["price"],
+            bson["owner_id"],
+            Side(bson["side"]),
+            bson["posted"],
+            bson["is_matched"],
+            bson["_id"],
+        )
 
     @property
     def to_bson(self) -> dict:
