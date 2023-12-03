@@ -85,5 +85,18 @@ def get_notifications():
     user = user_collection.get_by_email(current_user.email)
     if user is None:
         return {'message': 'User not found'}, 404
-    notifications = [notification.to_bson for notification in user.notifications]
+    notifications = []
+    for notification in user.notifications:
+        side_str = 'BUY' if notification.client_side == 0 else 'SELL'
+        client = user_collection.get_by_id(notification.client_id)
+        if client is None:  
+            continue
+        notification_data = {
+            'side': side_str,
+            'client': client.name,
+            'client_phone': client.phone,
+            'client_email': client.email
+        }
+        notifications.append(notification_data)
+
     return jsonify(notifications), 200
