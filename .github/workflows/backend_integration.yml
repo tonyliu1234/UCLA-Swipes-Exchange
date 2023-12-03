@@ -29,8 +29,8 @@ jobs:
 
     - name: Set up MongoDB Database
       run: |
-        mongo --eval 'use ucla_swipes_exchange'  # Creates the database
-        mongo --eval 'db.createCollection("user")'  # Creates the 'user' collection
+        docker run --network host mongo mongo --eval 'use ucla_swipes_exchange' --host localhost
+        docker run --network host mongo mongo --eval 'db.createCollection("user")' --host localhost
 
     - name: Run Integration Tests
       run: |
