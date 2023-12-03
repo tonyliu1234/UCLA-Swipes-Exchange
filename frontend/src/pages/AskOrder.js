@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, MenuItem, FormControl, Select, InputLabel, Input, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import {InputAdornment, Typography, Box, MenuItem, FormControl, Select, InputLabel, Input, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
 import styled from '@emotion/styled';
 
 const Root = styled.div`
@@ -64,14 +65,15 @@ const StyledToggleButton = styled(ToggleButton)`
   line-height: 40px;
 `;
 
+const StyledInput = styled(Input)({
+  fontSize: '1.25rem', // Adjust the font size as needed, '1.25rem' is similar to h6
+});
+
 const fetchOrderStats = async () => {
   try {
-    const response = await fetch('http://localhost:5000/order/list_all_order', { // Adjust the URL to where your orders are fetched from
+    const response = await fetch('/order/list_all_order', { // Adjust the URL to where your orders are fetched from
       method: 'GET',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     if (!response.ok) {
@@ -104,10 +106,11 @@ const submitAskOrder = async (price, size) => {
     price: price,
     size: size, // Size is assumed to be a part of the order, based on your frontend
     // Other fields as required by your backend
+    side: 'ASK',
   };
 
   try {
-    const response = await fetch('http://localhost:5000/order/create_order', {
+    const response = await fetch('/order/create_order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -137,6 +140,30 @@ const AskOrder = () => {
   const [largestBid, setLargestBid] = useState(0);
   const [alignment, setAlignment] = useState('left');
 
+  const history = useHistory();
+
+  const handleCancel = () => {
+    history.push('/');
+  };
+
+  const handleSubmit = () => {
+    const intPrice = parseInt(price, 10);
+    if (!isNaN(intPrice)) {
+      submitAskOrder(intPrice, size).then(response => {
+        alert('Successfully created order!');
+        history.push('/');
+      }).catch(error => {
+        console.error('Error submitting ask order:', error);
+      });
+    
+      setPrice('');
+      setSize('');
+    } else {
+      console.error('Invalid price value');
+    }
+  }
+  
+
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
@@ -155,16 +182,6 @@ const AskOrder = () => {
       }
     });
   }, [alignment, largestBid]);
-
-  const handleSubmit = () => {
-    // Assuming you have state variables for price and size
-    submitAskOrder(price, size).then(response => {
-      // Handle response, maybe clear the form or show a success message
-      console.log('Order submitted:', response);
-    });
-    setPrice('');
-    setSize('');
-  }
   
 
   return (
@@ -192,21 +209,20 @@ const AskOrder = () => {
     </ToggleContainer>
       <FormControl fullWidth>
         <InputLabel htmlFor="price">Price</InputLabel>
-        <Input id="price" style={{marginBottom: '2Rem'}} startAdornment={<Typography variant="h6">${price}</Typography>} />
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="ask-expiration-label">Ask Expiration</InputLabel>
-        <Select
-          labelId="ask-expiration-label"
-          defaultValue={30}
-        >
-          <MenuItem value={30}>30 Days</MenuItem>
-          <MenuItem value={60}>60 Days</MenuItem>
-          <MenuItem value={90}>90 Days</MenuItem>
-        </Select>
+        <StyledInput
+          id="price"
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          startAdornment={
+            <InputAdornment position="start">
+              <Typography variant="h6">$</Typography>
+            </InputAdornment>
+          }
+        />
       </FormControl>
       <Box display="flex" justifyContent="space-between" my={2}>
-        <Button variant="text" style={{color: 'black'}}>Cancel</Button>
+        <Button variant="text" style={{color: 'black'}} onClick={handleCancel}>Cancel</Button>
         <Button variant="contained" color="grey" onClick={handleSubmit}>
           Submit
         </Button>
