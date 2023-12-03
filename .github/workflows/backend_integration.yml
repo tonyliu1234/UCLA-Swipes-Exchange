@@ -3,7 +3,7 @@ name: Backend Integration Tests
 on: [pull_request]
 
 jobs:
-  test:
+  integration-test:
     runs-on: ubuntu-latest
 
     steps:
