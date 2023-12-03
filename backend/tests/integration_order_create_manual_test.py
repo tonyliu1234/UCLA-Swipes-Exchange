@@ -39,6 +39,18 @@ def register(email, password, phone, name):
     response = session.post(url, json=data)
     return response
 
+def update_profile(email, password, phone, name):
+    """Log in to the server and store the session cookie."""
+    url = f'{base_url}/user/update_profile'
+    data = {
+        'email': email,
+        'password': password,
+        'phone': phone,
+        'name': name
+    }
+    response = session.post(url, json=data)
+    return response
+
 def login(email, password):
     """Log in to the server and store the session cookie."""
     url = f'{base_url}/user/login'
@@ -120,6 +132,17 @@ print("\Getting ALL orders...")
 all_order_response = list_all_orders()
 assert all_order_response.status_code == 200, f"List all orders failed with status code {all_order_response.status_code}"
 print("get ALL orders response:", all_order_response.json())
+
+print("Updating User Name...")
+update_response = update_profile(email='john@example.com', password='yourpassword', phone='1234567890', name='John NMSL')
+assert update_response.status_code == 200, f"Update Profile failed with status code {update_response.status_code}"
+print("get ALL orders response:", update_response.json())
+
+print("Who am I...")
+whoami_response = whoami()
+assert whoami_response.status_code == 200, f"Whoami failed with status code {whoami_response.status_code}"
+assert whoami_response.json()['name'] == 'John NMSL'
+print("Whoami response:", whoami_response.json())
 
 print("Finished Testing: deleting test user...")
 delete_user_response = delete_user()
