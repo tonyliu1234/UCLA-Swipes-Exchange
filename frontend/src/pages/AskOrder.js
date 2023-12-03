@@ -66,8 +66,9 @@ const StyledToggleButton = styled(ToggleButton)`
 
 const fetchOrderStats = async () => {
   try {
-    const response = await fetch('http://localhost:5000/orders', { // Adjust the URL to where your orders are fetched from
+    const response = await fetch('http://localhost:5000/order/list_all_order', { // Adjust the URL to where your orders are fetched from
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -106,7 +107,7 @@ const submitAskOrder = async (price, size) => {
   };
 
   try {
-    const response = await fetch('http://localhost:5000', {
+    const response = await fetch('http://localhost:5000/order/create_order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
