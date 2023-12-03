@@ -29,7 +29,7 @@ export default function UserProfile() {
   };
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/user/logout", {
+      const response = await fetch("/user/logout", {
         method: "POST",
         credentials: "include", // Correct value for credentials
       });
@@ -63,7 +63,7 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/user/whoami", {
+        const response = await fetch("/user/whoami", {
           method: "GET",
           credentials: "include",
         });

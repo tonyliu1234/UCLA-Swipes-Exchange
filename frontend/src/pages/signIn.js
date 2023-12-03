@@ -44,7 +44,7 @@ export default function SignInSide() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/user/login", {
+      const response = await axios.post("/user/login", {
         email: data.get("email"),
         password: data.get("password"),
       });
