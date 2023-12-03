@@ -34,11 +34,11 @@ export default function UserProfile() {
   };
 
   const handleBuyingClick = () => {
-    history.push("./AsksPage");
+    history.push("./BidsPage");
   };
 
   const handleSellingClick = () => {
-    history.push("./BidsPage");
+    history.push("./AsksPage");
   };
 
   const handleLogout = async () => {
