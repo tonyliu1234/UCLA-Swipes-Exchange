@@ -13,6 +13,12 @@ def login(email, password):
     response = session.post(url, json=data)
     return response.json()
 
+def whoami():
+    """Who am I"""
+    url = f'{base_url}/user/whoami'
+    response = session.get(url)
+    return response.json()
+
 def create_order(price, side):
     """Create a new order."""
     url = f'{base_url}/order/create_order'
@@ -43,6 +49,10 @@ def list_all_orders():
 print("Logging in...")
 login_response = login('john@example.com', 'yourpassword')
 print("Login response:", login_response)
+
+print("Who am I...")
+whoami_response = whoami()
+print("Whoami response:", whoami_response)
 
 print("\nCreating an order...")
 create_order_response = create_order(100, 'BID')
