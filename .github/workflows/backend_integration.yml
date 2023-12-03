@@ -1,6 +1,6 @@
 name: Backend Integration Tests
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
@@ -33,6 +33,6 @@ jobs:
 
     - name: Run Integration Tests
       run: |
-        cd backend/test/
+        cd backend/tests/
         chmod +x run_test.sh
         ./run_test.sh
