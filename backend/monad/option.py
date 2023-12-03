@@ -1,7 +1,7 @@
-from typing import Any, TypeVar, Callable, Optional
+from typing import Any, Callable, Optional, TypeVar
 
-T = TypeVar('T')
-U = TypeVar('U')
+T = TypeVar("T")
+U = TypeVar("U")
 
 
 def some(option: Optional[Any]) -> bool:

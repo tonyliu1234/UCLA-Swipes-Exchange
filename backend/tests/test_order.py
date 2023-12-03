@@ -1,10 +1,10 @@
-from bson import ObjectId
 from unittest.mock import Mock
-from components.user import User
-from components.order import Order
-from components.side import Side
 
+from bson import ObjectId
+from components.order import Order
 from components.order_matching_engine import OrderMatchingEngine
+from components.side import Side
+from components.user import User
 
 
 def test_push_bid_order():
@@ -39,22 +39,12 @@ def test_no_match_orders():
     order_matching_engine.push(ask_order)
     matched_orders = order_matching_engine._find_match()
     assert matched_orders == []
+
+
 def test_match_orders():
     user_collection_mock = Mock()
-    buyer = User(
-        "buyer",
-        "123456789",
-        "test@test.com",
-        "password",
-        id='i am buyer'
-    )
-    seller = User(
-        "seller",
-        "987654321",
-        "test2@test.com",
-        "password",
-        id='i am seller'
-    )
+    buyer = User("buyer", "123456789", "test@test.com", "password", id="i am buyer")
+    seller = User("seller", "987654321", "test2@test.com", "password", id="i am seller")
 
     def mock_get(id):
         if id == "123456789":
@@ -63,7 +53,7 @@ def test_match_orders():
             return seller
         else:
             return None
-        
+
     user_collection_mock.get = mock_get
 
     order_matching_engine = OrderMatchingEngine(user_collection_mock)
