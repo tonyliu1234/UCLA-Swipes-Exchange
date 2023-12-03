@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -35,6 +36,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const history = useHistory();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -57,9 +60,8 @@ export default function SignUp() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle successful registration
         console.log("Registration success:", data);
-        // Redirect to login or home page, or show success message
+        history.push("/signIn");
       })
       .catch((error) => {
         // Handle errors
