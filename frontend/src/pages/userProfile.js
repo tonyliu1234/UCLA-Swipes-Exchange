@@ -19,10 +19,15 @@ import SellIcon from "@mui/icons-material/Sell";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from "@mui/icons-material/Notifications"; // Import Notifications icon
 import EditIcon from "@mui/icons-material/Edit"; // import Edit icon
+import HomeIcon from "@mui/icons-material/Home"; // import Edit icon
 import { useHistory } from "react-router-dom";
 
 export default function UserProfile() {
   let history = useHistory();
+
+  const handleHomeClick = () => {
+    history.push("/");
+  };
 
   const handleEditProfileClick = () => {
     // Use the correct path to your "changeUserProfile" page
@@ -125,6 +130,15 @@ export default function UserProfile() {
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>
+            {/* Add a Home button */}
+            <ListItem button onClick={handleHomeClick} sx={{ py: 2 }}>
+              <ListItemIcon>
+                {/* You can use an appropriate icon here */}
+                <HomeIcon /> {/* Import this icon from @mui/icons-material */}
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
+
             <ListItem button onClick={handleBuyingClick} sx={{ py: 2 }}>
               <ListItemIcon>
                 <ShoppingCartIcon />
