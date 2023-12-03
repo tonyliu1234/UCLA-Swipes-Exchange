@@ -4,10 +4,9 @@ from datetime import datetime
 from typing import Optional
 
 from bson import ObjectId
-
 from monad import option
 
-from .side import Side
+from components.side import Side
 
 
 class Order:
@@ -50,7 +49,7 @@ class Order:
     def from_bson(cls, bson: dict):
         return cls(
             bson["price"],
-            bson["owner_id"],
+            ObjectId(bson["owner_id"]),
             Side(bson["side"]),
             bson["posted"],
             bson["is_matched"],
@@ -61,9 +60,9 @@ class Order:
     def to_bson(self) -> dict:
         return {
             "price": self.price,
-            "owner_id": str(self.owner_id),
+            "owner_id": self.owner_id,
             "side": self.side.value,
             "posted": self.posted,
             "is_matched": self.is_matched,
-            "_id": str(self.id),
+            "_id": self.id,
         }

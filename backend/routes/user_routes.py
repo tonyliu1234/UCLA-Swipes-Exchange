@@ -20,7 +20,7 @@ def register():
     hashed_password = User.hash_password(password)
     user = User(name, phone, email, hashed_password)
     try:
-        user_collection.create(user.to_bson)
+        user_collection.create(user)
         return {"message": f"User {email} registered successfully"}, 201
     except Exception as e:
         return {"message": f"Registration failed: {e}"}, 500
@@ -57,9 +57,7 @@ def logout():
 @login_required
 def whoami():
     user = user_collection.get_by_email(current_user.email)
-
     user_data = {"phone": user.phone, "name": user.name, "email": user.email}
-
     return user_data, 200
 
 
