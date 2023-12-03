@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
-from components.user import UserCollection, User
+from components.user import UserCollection
 from components.order import Side, Order
 from components.order_matching_engine import OrderMatchingEngine
 
@@ -64,5 +64,3 @@ def create_order():
 def process_new_order(order: Order):
     order_matching_engine.push(order)
     order_matching_engine.match()
-
-
