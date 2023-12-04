@@ -77,7 +77,7 @@ class User(UserMixin):
     @property
     def to_dict(self) -> dict:
         bson = self.to_bson
-        del bson['_id']
+        del bson["_id"]
         return bson
 
     @staticmethod

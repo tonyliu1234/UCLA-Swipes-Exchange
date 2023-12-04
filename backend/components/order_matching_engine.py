@@ -48,5 +48,5 @@ class OrderMatchingEngine:
 
             ask_user = option.unwrap(User.from_id(top_ask.owner_id))
             option.unwrap(ask_user.get_order(top_ask.id)).is_matched = True
-            ask_user.create_notification(Notification(top_bid.id, Side.BID))
+            ask_user.create_notification(Notification(top_bid.owner_id, Side.BID))
             ask_user.persist()
