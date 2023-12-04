@@ -28,7 +28,7 @@ jobs:
         FLASK_ENV: development
       run: |
         cd backend/
-        nohup python -m flask run --host=0.0.0.0 &> flask.log &
+        python -m flask run --host=0.0.0.0 &> flask.log &
         echo "FLASK_PID=$!" >> $GITHUB_ENV
 
     - name: Wait for Flask to start
@@ -37,10 +37,14 @@ jobs:
     - name: Print Flask Logs
       run: cat backend/flask.log
 
+    - name: Check Listening Ports
+      run: netstat -tuln || true
+
     - name: Check Flask server is running
-      run: curl --fail http://127.0.0.1:5000/ || exit 1
+      run: curl --fail http://0.0.0.0:5000/ || exit 1
 
     - name: Shutdown Flask server
       if: always()
       run: |
         kill $FLASK_PID || true
+  
