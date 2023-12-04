@@ -21,8 +21,8 @@ class Notification:
     @property
     def to_bson(self) -> dict:
         return {
-            "_id": self.id,
-            "client_id": self.client_id,
+            "_id": str(self.id),
+            "client_id": str(self.client_id),
             "client_side": self.client_side.value,
         }
 

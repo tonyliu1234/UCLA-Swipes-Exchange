@@ -6,7 +6,6 @@ from components.order_matching_engine import OrderMatchingEngine
 from components.user import User, UserCollection
 from flask import Blueprint, request
 from flask_login import current_user, login_required
-from itertools import chain
 from monad import option
 
 order_route = Blueprint("order", __name__)
@@ -30,6 +29,7 @@ def get_order():
 @login_required
 def list_order():
     user = cast(User, current_user)
+    print(user.orders)
     return [order.to_bson for order in user.orders], 200
 
 
@@ -49,7 +49,6 @@ def create_order():
 
     order = Order(int(price), user.id, side)
     user.create_order(order)
-    user.persist()
 
     order_matching_engine.push(order)
     order_matching_engine.match()

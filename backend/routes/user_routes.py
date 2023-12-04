@@ -22,7 +22,7 @@ def register():
     hashed_password = User.hash_password(password)
     user = User(name, phone, email, hashed_password)
     try:
-        user.persist()
+        user.create()
         return {"message": f"User {email} registered successfully"}, 201
     except Exception as e:
         return {"message": f"Registration failed: {e}"}, 500

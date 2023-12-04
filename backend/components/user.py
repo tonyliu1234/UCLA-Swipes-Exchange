@@ -64,7 +64,7 @@ class User(UserMixin):
     @property
     def to_bson(self):
         return {
-            "_id": self.id,
+            "_id": str(self.id),
             "name": self.name,
             "phone": self.phone,
             "email": self.email,
@@ -80,6 +80,9 @@ class User(UserMixin):
         password_bytes = password.encode("utf-8")
         hash_object = hashlib.sha256(password_bytes)
         return hash_object.hexdigest()
+
+    def create(self) -> None:
+        UserCollection().create(self)
 
     def persist(self) -> None:
         UserCollection().update(self.id, self)
@@ -111,6 +114,9 @@ class UserCollection:
         self.collection = self.connection.get_collection("users")
         self.collection.create_index("email", unique=True)
 
+    def create(self, user: User) -> ObjectId:
+        return self.collection.insert_one(user.to_bson).inserted_id
+
     def get(self, document_id: ObjectId) -> Optional[User]:
         return option.and_then(
             self.collection.find_one({"_id": document_id}), User.from_bson
@@ -133,8 +139,10 @@ class UserCollection:
         ]
 
     def update(self, document_id: ObjectId, user: User) -> int:
+        user_bson = user.to_bson
+        del user_bson["_id"]
         return self.collection.update_one(
-            {"_id": document_id}, {"$set": user.to_bson}
+            {"_id": document_id}, {"$set": user_bson}
         ).modified_count
 
     def delete(self, document_id: ObjectId) -> int:

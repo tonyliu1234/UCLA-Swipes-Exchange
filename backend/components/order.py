@@ -60,11 +60,11 @@ class Order:
     def to_bson(self) -> dict:
         return {
             "price": self.price,
-            "owner_id": self.owner_id,
+            "owner_id": str(self.owner_id),
             "side": self.side.value,
             "posted": self.posted,
             "is_matched": self.is_matched,
-            "_id": self.id,
+            "_id": str(self.id),
         }
 
     def __repr__(self) -> str:
