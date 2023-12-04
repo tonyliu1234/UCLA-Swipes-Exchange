@@ -42,12 +42,11 @@ class OrderMatchingEngine:
             heappop(self.ask_queue)
 
             bid_user = option.unwrap(User.from_id(top_bid.owner_id))
-            ask_user = option.unwrap(User.from_id(top_ask.owner_id))
-            print("fuck", top_bid.id, top_ask.id)
             option.unwrap(bid_user.get_order(top_bid.id)).is_matched = True
-            bid_user.create_notification(Notification(ask_user.id, Side.ASK))
+            bid_user.create_notification(Notification(top_ask.owner_id, Side.ASK))
             bid_user.persist()
 
+            ask_user = option.unwrap(User.from_id(top_ask.owner_id))
             option.unwrap(ask_user.get_order(top_ask.id)).is_matched = True
-            ask_user.create_notification(Notification(bid_user.id, Side.BID))
+            ask_user.create_notification(Notification(top_bid.id, Side.BID))
             ask_user.persist()

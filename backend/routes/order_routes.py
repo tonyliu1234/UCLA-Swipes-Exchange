@@ -20,7 +20,7 @@ def get_order():
 
     return option.map_or(
         user.get_order(order_id),
-        lambda order: (order.to_bson, 200),
+        lambda order: (order.to_dict, 200),
         ({"error": "order not found"}, 404),
     )
 
@@ -29,14 +29,13 @@ def get_order():
 @login_required
 def list_order():
     user = cast(User, current_user)
-    print(user.orders)
-    return [order.to_bson for order in user.orders], 200
+    return [order.to_dict for order in user.orders], 200
 
 
 @order_route.route("/list_all_order", methods=["GET"])
 @login_required
 def list_all_order():
-    return [order.to_bson for order in UserCollection().get_all_order()], 200
+    return [order.to_dict for order in UserCollection().get_all_order()], 200
 
 
 @order_route.route("/create_order", methods=["POST"])
@@ -52,4 +51,4 @@ def create_order():
 
     order_matching_engine.push(order)
     order_matching_engine.match()
-    return order.to_bson, 200
+    return order.to_dict, 200

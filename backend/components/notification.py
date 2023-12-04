@@ -21,8 +21,8 @@ class Notification:
     @property
     def to_bson(self) -> dict:
         return {
-            "_id": str(self.id),
-            "client_id": str(self.client_id),
+            "_id": self.id,
+            "client_id": self.client_id,
             "client_side": self.client_side.value,
         }
 
@@ -34,5 +34,8 @@ class Notification:
             ObjectId(bson["_id"]),
         )
 
-    def __repr__(self) -> str:
-        return str(self.to_bson)
+    @property
+    def to_dict(self) -> dict:
+        bson = self.to_bson
+        del bson["_id"]
+        return bson

@@ -60,12 +60,16 @@ class Order:
     def to_bson(self) -> dict:
         return {
             "price": self.price,
-            "owner_id": str(self.owner_id),
+            "owner_id": self.owner_id,
             "side": self.side.value,
             "posted": self.posted,
             "is_matched": self.is_matched,
-            "_id": str(self.id),
+            "_id": self.id,
         }
 
-    def __repr__(self) -> str:
-        return str(self.to_bson)
+    @property
+    def to_dict(self) -> dict:
+        bson = self.to_bson
+        del bson['_id']
+        del bson['owner_id']
+        return bson

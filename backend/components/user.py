@@ -64,7 +64,6 @@ class User(UserMixin):
     @property
     def to_bson(self):
         return {
-            "_id": str(self.id),
             "name": self.name,
             "phone": self.phone,
             "email": self.email,
@@ -74,6 +73,12 @@ class User(UserMixin):
                 notification.to_bson for notification in self.notifications
             ],
         }
+
+    @property
+    def to_dict(self) -> dict:
+        bson = self.to_bson
+        del bson['_id']
+        return bson
 
     @staticmethod
     def hash_password(password: str) -> str:
@@ -100,9 +105,6 @@ class User(UserMixin):
     def create_notification(self, notification: Notification) -> None:
         self.notifications.append(notification)
         self.persist()
-
-    def __repr__(self) -> str:
-        return str(self.to_bson)
 
 
 class UserCollection:
@@ -139,10 +141,8 @@ class UserCollection:
         ]
 
     def update(self, document_id: ObjectId, user: User) -> int:
-        user_bson = user.to_bson
-        del user_bson["_id"]
         return self.collection.update_one(
-            {"_id": document_id}, {"$set": user_bson}
+            {"_id": document_id}, {"$set": user.to_bson}
         ).modified_count
 
     def delete(self, document_id: ObjectId) -> int:
