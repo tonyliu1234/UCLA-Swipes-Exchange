@@ -1,6 +1,5 @@
 name: Flask CI
 
-# This workflow is triggered on pushes to the repository.
 on: [push]
 
 jobs:
@@ -14,7 +13,7 @@ jobs:
     - name: Set up Python 3.x
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x' # Use the version of Python to which your project is tied, e.g., 3.8, 3.9, etc.
+        python-version: '3.x'
 
     - name: Install dependencies
       run: |
@@ -23,28 +22,20 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Flask application
-      env:
-        FLASK_APP: app.py
-        FLASK_ENV: development
       run: |
         cd backend/
-        python -m flask run --host=0.0.0.0 &> flask.log &
+        FLASK_APP=app.py FLASK_ENV=development python -m flask run --host=0.0.0.0 &> flask.log &
         echo "FLASK_PID=$!" >> $GITHUB_ENV
 
     - name: Wait for Flask to start
       run: sleep 15
 
-    - name: Print Flask Logs
-      run: cat backend/flask.log
-
-    - name: Check Listening Ports
-      run: netstat -tuln || true
-
-    - name: Check Flask server is running
-      run: curl --fail http://0.0.0.0:5000/ || exit 1
+    - name: Extract Port Number and Check Flask Server
+      run: |
+        PORT=$(grep -oP 'Running on http://[^:]+:\K\d+' backend/flask.log)
+        curl --fail http://127.0.0.1:$PORT/ || exit 1
 
     - name: Shutdown Flask server
       if: always()
       run: |
         kill $FLASK_PID || true
-  
