@@ -54,8 +54,11 @@ try:
 
     # Getting notifications
     print("Getting notifications...")
-    assert seller.notification().status_code == 200
-    assert buyer.notification().status_code == 200
+    seller_notification = seller.notification()
+    buyer_notification = buyer.notification()
+    assert seller_notification.status_code == 200
+    assert buyer_notification.status_code == 200
+    assert len(seller_notification.json()) == len(buyer_notification.json()) == 1
 
 except AssertionError as e:
     print(f"An error occurred: {e}")
