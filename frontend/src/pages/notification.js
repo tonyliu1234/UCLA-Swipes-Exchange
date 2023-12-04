@@ -44,7 +44,7 @@ function NotificationsPage() {
     } else {
       // Fetch notifications from the API
       axios
-        .get("/user/register")
+        .get("/user/notifications")
         .then((response) => {
           setNotifications(response.data);
         })
