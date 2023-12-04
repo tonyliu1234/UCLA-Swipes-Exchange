@@ -3,7 +3,7 @@ from typing import Optional
 from bson import ObjectId
 from monad import option
 
-from .side import Side
+from components.side import Side
 
 
 class Notification:

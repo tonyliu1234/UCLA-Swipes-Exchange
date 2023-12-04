@@ -66,3 +66,6 @@ class Order:
             "is_matched": self.is_matched,
             "_id": self.id,
         }
+
+    def __repr__(self) -> str:
+        return str(self.to_bson)

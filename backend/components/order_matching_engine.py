@@ -5,16 +5,22 @@ from monad import option
 from components.notification import Notification
 from components.order import Order
 from components.side import Side
-from components.user import User
+from components.user import User, UserCollection
 
 
 class OrderMatchingEngine:
     bid_queue: list[Order]
     ask_queue: list[Order]
 
-    def __init__(self, user_collection=None) -> None:
+    def __init__(self) -> None:
         self.bid_queue = []
         self.ask_queue = []
+
+        for order in UserCollection().get_all_order():
+            if order.is_matched:
+                continue
+            self.push(order)
+            self.match()
 
     def push(self, order: Order) -> None:
         match order.side:

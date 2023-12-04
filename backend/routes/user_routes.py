@@ -1,9 +1,11 @@
-from components.user import User, UserCollection
-from flask import Blueprint, jsonify, request
+from typing import cast
+from components.user import User
+from flask import Blueprint, request
 from flask_login import current_user, login_required, login_user, logout_user
 
+from monad import option
+
 user_route = Blueprint("user", __name__)
-user_collection = UserCollection()
 
 
 @user_route.route("/register", methods=["POST"])
@@ -14,13 +16,13 @@ def register():
     phone: str = data.get("phone")
     password: str = data.get("password")
 
-    if user_collection.get_by_email(email) is not None:
+    if User.from_email(email) is not None:
         return {"message": "Email already in use"}, 409
 
     hashed_password = User.hash_password(password)
     user = User(name, phone, email, hashed_password)
     try:
-        user_collection.create(user)
+        user.persist()
         return {"message": f"User {email} registered successfully"}, 201
     except Exception as e:
         return {"message": f"Registration failed: {e}"}, 500
@@ -35,7 +37,7 @@ def login():
     if not email or not password:
         return {"message": "Email and password are required"}, 400
 
-    user = user_collection.get_by_email(email)
+    user = User.from_email(email)
     if user is None:
         return {"message": "User does not exist"}, 401
 
@@ -56,44 +58,43 @@ def logout():
 @user_route.route("/whoami")
 @login_required
 def whoami():
-    user = user_collection.get_by_email(current_user.email)
-    user_data = {"phone": user.phone, "name": user.name, "email": user.email}
-    return user_data, 200
+    user = cast(User, current_user)
+    return {
+        "email": user.email,
+        "name": user.name,
+        "phone": user.phone,
+    }, 200
 
 
 @user_route.route("/update_profile", methods=["POST"])
 @login_required
 def profile_change():
-    def email_already_in_use(email):
-        return (
-            email != current_user.email
-            and user_collection.get_by_email(email) is not None
-        )
-
-    user = User.from_bson(user_collection.get(current_user.id))
+    user = cast(User, current_user)
     data = request.get_json()
 
-    for attr in ["name", "phone"]:
-        if attr_value := data.get(attr):
-            setattr(user, attr, attr_value)
+    if name := data.get("name"):
+        user.name = name
 
-    if "email" in data and email_already_in_use(data["email"]):
-        return {"message": "Email already in use"}, 409
+    if phone := data.get("phone"):
+        user.phone = phone
 
     if email := data.get("email"):
+        if email != user.email and option.some(User.from_email(email)):
+            return {"message": "Email already in use"}, 409
         user.email = email
 
     if password := data.get("password"):
         user.password = User.hash_password(password)
 
-    user_collection.update(user.id, user.to_bson)
-    return {'message': 'User profile updated successfully'}, 200
+    user.persist()
+    return {"message": "User profile updated successfully"}, 200
 
 
 @user_route.route("/delete_user", methods=["DELETE"])
 @login_required
 def delete_user():
-    delete_count = user_collection.delete_by_email(current_user.email)
+    user = cast(User, current_user)
+    delete_count = user.delete()
     if delete_count == 0:
         return {"message": "Delete user failed: User not found"}, 500
     logout_user()
@@ -103,21 +104,18 @@ def delete_user():
 @user_route.route("/notifications", methods=["GET"])
 @login_required
 def get_notifications():
-    user = user_collection.get_by_email(current_user.email)
-    if user is None:
-        return {"message": "User not found"}, 404
+    user = cast(User, current_user)
+
     notifications = []
     for notification in user.notifications:
-        side_str = "BUY" if notification.client_side == 0 else "SELL"
-        client = user_collection.get_by_id(notification.client_id)
-        if client is None:
-            continue
-        notification_data = {
-            "side": side_str,
-            "client": client.name,
-            "client_phone": client.phone,
-            "client_email": client.email,
-        }
-        notifications.append(notification_data)
+        client = option.unwrap(User.from_id(notification.client_id))
+        notifications.append(
+            {
+                "side": str(notification.client_side),
+                "client": client.name,
+                "client_phone": client.phone,
+                "client_email": client.email,
+            }
+        )
 
-    return jsonify(notifications), 200
+    return notifications, 200
