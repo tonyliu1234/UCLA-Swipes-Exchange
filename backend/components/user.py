@@ -1,16 +1,17 @@
+from __future__ import annotations
+
 import hashlib
+from itertools import chain
 from typing import Optional
 
 from bson import ObjectId
+from database.connection import DBConnection
 from flask_login import UserMixin
-from pymongo import errors
-from pymongo.cursor import Cursor
+from monad import option
+from pymongo.collection import Collection
 
 from components.notification import Notification
 from components.order import Order
-from components.side import Side
-from database.connection import DBCollection
-from monad import option
 
 
 class User(UserMixin):
@@ -40,6 +41,14 @@ class User(UserMixin):
         self.notifications = option.unwrap_or(notifications, [])
         self.id = option.unwrap_or(id, ObjectId())
 
+    @staticmethod
+    def from_id(id: ObjectId):
+        return UserCollection().get(id)
+
+    @staticmethod
+    def from_email(email: str):
+        return UserCollection().get_by_email(email)
+
     @classmethod
     def from_bson(cls, bson: dict):
         return cls(
@@ -47,27 +56,29 @@ class User(UserMixin):
             bson["phone"],
             bson["email"],
             bson["password"],
-            [Order.from_bson(order) for order in bson["orders"]],
-            [
-                Notification.from_bson(notification)
-                for notification in bson["notifications"]
-            ],
+            list(map(Order.from_bson, bson["orders"])),
+            list(map(Notification.from_bson, bson["notifications"])),
             bson["_id"],
         )
 
     @property
     def to_bson(self):
         return {
-            "_id": self.id,
             "name": self.name,
             "phone": self.phone,
             "email": self.email,
             "password": self.password,
+            "orders": [order.to_bson for order in self.orders],
             "notifications": [
                 notification.to_bson for notification in self.notifications
             ],
-            "orders": [order.to_bson for order in self.orders],
         }
+
+    @property
+    def to_dict(self) -> dict:
+        bson = self.to_bson
+        del bson['_id']
+        return bson
 
     @staticmethod
     def hash_password(password: str) -> str:
@@ -75,51 +86,64 @@ class User(UserMixin):
         hash_object = hashlib.sha256(password_bytes)
         return hash_object.hexdigest()
 
-    def create_order(self, price: int, side: Side) -> Order:
-        order = Order(price, self.id, side)
+    def create(self) -> None:
+        UserCollection().create(self)
+
+    def persist(self) -> None:
+        UserCollection().update(self.id, self)
+
+    def delete(self) -> None:
+        UserCollection().delete(self.id)
+
+    def create_order(self, order: Order) -> None:
         self.orders.append(order)
-        return order
+        self.persist()
 
-    def fetch_notifications(
-        self, user_collection: "UserCollection"
-    ) -> list[Notification]:
-        new_data = user_collection.get_by_id(self.id)
-        if new_data:
-            self.notifications = new_data.notifications
-            return self.notifications
-        else:
-            return self.notifications
+    def get_order(self, order_id: ObjectId) -> Optional[Order]:
+        return list(filter(lambda order: order.id == order_id, self.orders))[0]
+
+    def create_notification(self, notification: Notification) -> None:
+        self.notifications.append(notification)
+        self.persist()
 
 
-class UserCollection(DBCollection):
+class UserCollection:
+    connection: DBConnection
+    collection: Collection
+
     def __init__(self):
-        super().__init__("users")
-        # Ensure `email` is unique within the collection
+        self.connection = DBConnection()
+        self.collection = self.connection.get_collection("users")
         self.collection.create_index("email", unique=True)
 
-    def get_all_user(self) -> Optional[Cursor[dict]]:
-        return self.collection.find({})
+    def create(self, user: User) -> ObjectId:
+        return self.collection.insert_one(user.to_bson).inserted_id
+
+    def get(self, document_id: ObjectId) -> Optional[User]:
+        return option.and_then(
+            self.collection.find_one({"_id": document_id}), User.from_bson
+        )
 
     def get_by_email(self, email: str) -> Optional[User]:
         return option.and_then(
             self.collection.find_one({"email": email}), User.from_bson
         )
 
-    def get_by_id(self, id: ObjectId) -> Optional[User]:
-        return option.and_then(self.collection.find_one({"_id": id}), User.from_bson)
+    def get_all(self) -> list[User]:
+        return list(map(User.from_bson, self.collection.find({})))
 
-    def update_by_email(self, email: str, data: dict) -> int:
-        # Ensure that the data doesn't try to change the email to one that already exists
-        if "email" in data:
-            existing_user = self.get_by_email(data["email"])
-            if existing_user and existing_user.email != email:
-                raise errors.DuplicateKeyError(
-                    "Cannot update user: the new email is already in use by another user."
-                )
+    def get_all_order(self) -> list[Order]:
+        return [
+            order
+            for order in chain.from_iterable(
+                map(lambda user: user.orders, UserCollection().get_all())
+            )
+        ]
 
+    def update(self, document_id: ObjectId, user: User) -> int:
         return self.collection.update_one(
-            {"email": email}, {"$set": data}
+            {"_id": document_id}, {"$set": user.to_bson}
         ).modified_count
 
-    def delete_by_email(self, email: str) -> int:
-        return self.collection.delete_one({"email": email}).deleted_count
+    def delete(self, document_id: ObjectId) -> int:
+        return self.collection.delete_one({"_id": document_id}).deleted_count

@@ -10,7 +10,7 @@ from flask_login import LoginManager
 from components.user import User
 from monad import option
 from routes.order_routes import order_route
-from routes.user_routes import user_collection, user_route
+from routes.user_routes import user_route
 
 load_dotenv()
 
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     @login_manager.user_loader
     def load_user(user_id: str) -> Optional[User]:
-        return option.and_then(user_collection.get(ObjectId(user_id)), User.from_bson)
+        return User.from_id(ObjectId(user_id))
 
     flask_app.register_blueprint(user_route, url_prefix="/user")
     flask_app.register_blueprint(order_route, url_prefix="/order")

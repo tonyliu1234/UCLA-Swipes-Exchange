@@ -2,24 +2,25 @@ from heapq import heappop, heappush
 
 from monad import option
 
-from .notification import Notification
-from .order import Order
-from .side import Side
-from .user import UserCollection
+from components.notification import Notification
+from components.order import Order
+from components.side import Side
+from components.user import User, UserCollection
 
 
 class OrderMatchingEngine:
     bid_queue: list[Order]
     ask_queue: list[Order]
-    user_collection: UserCollection
 
-    def __init__(self, user_collection=None) -> None:
+    def __init__(self) -> None:
         self.bid_queue = []
         self.ask_queue = []
-        if user_collection is None:
-            self.user_collection = UserCollection()
-        else:
-            self.user_collection = user_collection
+
+        for order in UserCollection().get_all_order():
+            if order.is_matched:
+                continue
+            self.push(order)
+            self.match()
 
     def push(self, order: Order) -> None:
         match order.side:
@@ -30,52 +31,22 @@ class OrderMatchingEngine:
             case _:
                 raise TypeError()
 
-    # Matches the best bid order with the best ask order
-    # whenever the highest bid price exceeds the lowest ask price
-    def _find_match(self) -> list[Order]:
-        matched_orders = []
+    def match(self) -> None:
         while self.bid_queue and self.ask_queue:
             top_bid = self.bid_queue[0]
             top_ask = self.ask_queue[0]
             if top_bid.price < top_ask.price:
                 break
 
-            matched_orders.append(top_bid)
-            matched_orders.append(top_ask)
-
-            top_bid.is_matched = True
-            top_ask.is_matched = True
-
             heappop(self.bid_queue)
             heappop(self.ask_queue)
 
-        return matched_orders
+            bid_user = option.unwrap(User.from_id(top_bid.owner_id))
+            option.unwrap(bid_user.get_order(top_bid.id)).is_matched = True
+            bid_user.create_notification(Notification(top_ask.owner_id, Side.ASK))
+            bid_user.persist()
 
-    # implement the match method that generate a match and create Notification
-    # to the users
-    def match(self) -> None:
-        matched_orders = self._find_match()
-        # found a match
-        if len(matched_orders) == 2:
-            bid, ask = matched_orders
-            buyer = option.unwrap(self.user_collection.get(bid.owner_id))
-            seller = option.unwrap(self.user_collection.get(ask.owner_id))
-
-            # update user's order
-            def mark_order_as_matched(user, order):
-                new_orders = []
-                for user_order in user.orders:
-                    if user_order.id == order.id:
-                        user_order.is_matched = True
-                    new_orders.append(user_order)
-                user.orders = new_orders
-
-            mark_order_as_matched(buyer, bid)
-            mark_order_as_matched(seller, ask)
-
-            # create Notification
-            buyer.notifications.append(Notification(seller.id, Side.ASK))
-            seller.notifications.append(Notification(buyer.id, Side.BID))
-            # update user
-            self.user_collection.update(buyer.id, buyer.to_bson)
-            self.user_collection.update(seller.id, seller.to_bson)
+            ask_user = option.unwrap(User.from_id(top_ask.owner_id))
+            option.unwrap(ask_user.get_order(top_ask.id)).is_matched = True
+            ask_user.create_notification(Notification(top_bid.id, Side.BID))
+            ask_user.persist()

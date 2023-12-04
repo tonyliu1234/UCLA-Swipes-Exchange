@@ -1,73 +1,54 @@
 from __future__ import annotations
 
+from typing import cast
 from components.order import Order, Side
 from components.order_matching_engine import OrderMatchingEngine
-from components.user import UserCollection
-from flask import Blueprint, jsonify, request
+from components.user import User, UserCollection
+from flask import Blueprint, request
 from flask_login import current_user, login_required
+from monad import option
 
 order_route = Blueprint("order", __name__)
 order_matching_engine = OrderMatchingEngine()
-user_collection = UserCollection()
-
-
-def get_user_orders(email: str):
-    return user_collection.get_by_email(email).orders
 
 
 @order_route.route("/get_order", methods=["GET"])
 @login_required
 def get_order():
-    email: str = current_user.email
-    user_orders = get_user_orders(email)
+    user = cast(User, current_user)
     order_id = request.get_json().get("id")
 
-    filtered_order = next(
-        (order for order in user_orders if str(order.id) == order_id), None
+    return option.map_or(
+        user.get_order(order_id),
+        lambda order: (order.to_dict, 200),
+        ({"error": "order not found"}, 404),
     )
-
-    if not filtered_order:
-        return jsonify({"error": "Order not found"}), 404
-
-    return jsonify(filtered_order.to_bson), 200
 
 
 @order_route.route("/list_order", methods=["GET"])
 @login_required
 def list_order():
-    email: str = current_user.email
-    user_orders = get_user_orders(email)
-    user_orders = [order.to_bson for order in user_orders]
-    return jsonify(user_orders), 200
+    user = cast(User, current_user)
+    return [order.to_dict for order in user.orders], 200
 
 
 @order_route.route("/list_all_order", methods=["GET"])
 @login_required
 def list_all_order():
-    cursor = user_collection.get_all_user()
-    all_orders = [doc.get("orders", []) for doc in cursor]
-    flat_all_orders = [order for user_orders in all_orders for order in user_orders]
-    return jsonify(flat_all_orders), 200
+    return [order.to_dict for order in UserCollection().get_all_order()], 200
 
 
 @order_route.route("/create_order", methods=["POST"])
 @login_required
 def create_order():
+    user = cast(User, current_user)
     data = request.get_json()
     price: str = data.get("price")
-    email: str = current_user.email
     side: Side = Side(data.get("side"))
 
-    user = user_collection.get_by_email(email)
-    order = user.create_order(price, side)
+    order = Order(int(price), user.id, side)
+    user.create_order(order)
 
-    user_collection.update_by_email(email, user.to_bson)
-
-    # TODO: Use Message Queue (Extremely Low Priority)
-    process_new_order(order)
-    return jsonify(order.to_bson), 200
-
-
-def process_new_order(order: Order):
     order_matching_engine.push(order)
     order_matching_engine.match()
+    return order.to_dict, 200
