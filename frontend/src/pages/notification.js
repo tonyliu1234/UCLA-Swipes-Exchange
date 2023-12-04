@@ -16,7 +16,7 @@ import { Button } from "@mui/material";
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
-  const useMockData = true; // Set to false to fetch data from the API
+  const useMockData = false; // Set to false to fetch data from the API
   const history = useHistory();
   const handleCancelClick = () => {
     history.push("/userProfile");
@@ -44,7 +44,7 @@ function NotificationsPage() {
     } else {
       // Fetch notifications from the API
       axios
-        .get("/user/register")
+        .get("/user/notifications")
         .then((response) => {
           setNotifications(response.data);
         })
