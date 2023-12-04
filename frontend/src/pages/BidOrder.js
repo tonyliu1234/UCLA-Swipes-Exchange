@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import styled from '@emotion/styled';
+import uclaBidImage from '../images/UCLA_BID.jpg';
 import { Button, Box, MenuItem, FormControl, Select, InputLabel, TextField, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
 const Root = styled.div`
@@ -9,7 +10,7 @@ const Root = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: url(https://source.unsplash.com/random?wallpapers);
+  background-image: url(${uclaBidImage});
   background-size: cover;
   background-position: center;
 `;
@@ -64,27 +65,46 @@ const fetchBidStats = async () => {
   
       let bidCount = 0;
       let lowestAskPrice = Infinity;
-  
+      let bidPrices = [];
       orders.forEach(order => {
-        if (order.side === 'BID') {
+        if (order.side === 'BID' && order.is_matched !== true) {
           bidCount++;
+          bidPrices.push(order.price)
         }
         console.log(order.price)
         if (order.side === 'ASK' && order.price < lowestAskPrice) {
           lowestAskPrice = order.price;
         }
       });
+      bidPrices.sort((a, b) => a - b);
+      const goodBid = calculatePercentile(bidPrices, 50);
+      const betterBid = calculatePercentile(bidPrices, 70);
   
-      return { totalBids: bidCount, lowestAsk: lowestAskPrice === Infinity ? 0 : lowestAskPrice };
+      return { 
+        totalBids: bidCount, 
+        lowestAsk: lowestAskPrice === Infinity ? 10 : lowestAskPrice,
+        goodBid: goodBid === null ? 10 : goodBid,
+        betterBid: betterBid === null ? 10 : betterBid 
+      };
     } catch (error) {
       console.error('Error fetching bid stats:', error);
     }
+  };
+
+  const calculatePercentile = (sortedPrices, percentile) => {
+    if (sortedPrices.length === 0) {
+      return null;
+    }
+    const index = Math.ceil(percentile / 100.0 * sortedPrices.length) - 1;
+    return sortedPrices[index];
   };
   
 
 const BidOrder = () => {
     const [totalBids, setTotalBids] = useState(0);
     const [lowestAsk, setLowestAsk] = useState(0);
+    const [goodBid, setGoodBid] = useState(10);
+    const [betterBid, setBetterBid] = useState(10);
     const [currentPrice, setCurrentPrice] = useState(null);
     const [selectedPrice, setSelectedPrice] = useState(null);
 
@@ -94,24 +114,41 @@ const BidOrder = () => {
       history.push('/'); // Navigate to the root or another desired route
     };
 
-    const handlePriceSelection = (event, newPrice) => {
-        setSelectedPrice(newPrice);
+    const handlePriceSelection = (event, newValue) => {
+      const price = newValue.split('-')[1];
+      setSelectedPrice(newValue);
+      setCurrentPrice(price);
     };
+    
     
     useEffect(() => {
       fetchBidStats().then(stats => {
         if (stats) {
           setTotalBids(stats.totalBids);
           setLowestAsk(stats.lowestAsk);
+          setGoodBid(stats.goodBid);
+          setBetterBid(stats.betterBid);
           setSelectedPrice(stats.lowestAsk);
+          const lowestPriceValue = Math.min(stats.lowestAsk, stats.goodBid, stats.betterBid);
+          let initialSelection;
+          if (lowestPriceValue === stats.lowestAsk) {
+            initialSelection = `buy-${stats.lowestAsk}`;
+          } else if (lowestPriceValue === stats.goodBid) {
+            initialSelection = `good-${stats.goodBid}`;
+          } else {
+            initialSelection = `better-${stats.betterBid}`;
+          }
+
+          setSelectedPrice(initialSelection);
+          setCurrentPrice(initialSelection.split('-')[1]);
         }
       });
     }, []);
     
     useEffect(() => {
-      if (selectedPrice === lowestAsk) { // Assuming 70 is the 'Buy Now' price
+      if (selectedPrice === lowestAsk) {
         setCurrentPrice(lowestAsk);
-      } else if (selectedPrice === 51 || selectedPrice === 56) { // Good Bid or Better Bid
+      } else if (selectedPrice === goodBid || selectedPrice === betterBid) { // Good Bid or Better Bid
         setCurrentPrice(selectedPrice);
       }
     }, [selectedPrice, lowestAsk]);
@@ -173,13 +210,13 @@ const BidOrder = () => {
             aria-label="price selection"
             style={{ justifyContent: 'center' }}
           >
-            <StyledToggleButton value={51} aria-label="good bid">
-              $51 Good Bid
+            <StyledToggleButton value={`good-${goodBid}`} aria-label="good bid">
+              ${goodBid} Good Bid
             </StyledToggleButton>
-            <StyledToggleButton value={56} aria-label="better bid">
-              $56 Better Bid
+            <StyledToggleButton value={`better-${betterBid}`} aria-label="better bid">
+              ${betterBid} Better Bid
             </StyledToggleButton>
-            <StyledToggleButton value={lowestAsk} aria-label="buy now">
+            <StyledToggleButton value={`buy-${lowestAsk}`} aria-label="buy now">
               ${lowestAsk} Buy Now
             </StyledToggleButton>
           </ToggleButtonGroup>
