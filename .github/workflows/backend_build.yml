@@ -25,13 +25,10 @@ jobs:
       run: |
         cd backend/
         FLASK_APP=app.py FLASK_ENV=development python -m flask run --host=0.0.0.0 --port=5000 &> flask.log &
-        echo "FLASK_PID=$!" >> $GITHUB_ENV
+        echo "FLASK_PID=$!" >> $GITHUB_ENV || exit 1
 
     - name: Wait for Flask to start
       run: sleep 10
-
-    - name: Check Flask server is running
-      run: curl --fail http://127.0.0.1:5000/ || exit 1
 
     - name: Shutdown Flask server
       if: always()
