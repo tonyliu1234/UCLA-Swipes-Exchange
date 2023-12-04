@@ -36,6 +36,10 @@ jobs:
     - name: Wait for Flask to start
       run: sleep 10
 
+    - name: Check Flask server is running
+      run: |
+        curl --fail http://127.0.0.1:5000/ || exit 1
+
     - name: Shutdown Flask server
       if: always()
       run: |
