@@ -12,6 +12,7 @@ const AsksPage = () => {
             try {
                 const response = await axios.get('/order/list_order'); // Adjust this API endpoint as needed
                 const asks = response.data.filter(order => order.side === 'ASK');
+                asks.sort((a, b) => new Date(b.posted) - new Date(a.posted));
                 setAsks(asks);
             } catch (error) {
                 console.error('Error fetching orders:', error);
