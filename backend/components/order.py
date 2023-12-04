@@ -70,6 +70,6 @@ class Order:
     @property
     def to_dict(self) -> dict:
         bson = self.to_bson
-        del bson['_id']
-        del bson['owner_id']
+        del bson["_id"]
+        del bson["owner_id"]
         return bson
