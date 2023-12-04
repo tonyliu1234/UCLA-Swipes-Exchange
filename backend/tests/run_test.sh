@@ -13,15 +13,15 @@ sleep 5
 # Navigate to the test script directory
 cd -  # Goes back to the previous directory
 
-# Run the first test script
-python integration_order_create_manual_test.py
-# Capture the exit status of the first test script
-TEST1_STATUS=$?
-
 # Run the second test script, test2.py
 python integration_order_matching.py
 # Capture the exit status of the second test script
 TEST2_STATUS=$?
+
+# Run the first test script
+python integration_order_create_manual_test.py
+# Capture the exit status of the first test script
+TEST1_STATUS=$?
 
 # Terminate the Python application
 kill $APP_PID
