@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import styled from '@emotion/styled';
 import uclaBidImage from '../images/UCLA_BID.jpg';
-import { Button, Box, MenuItem, FormControl, Select, InputLabel, TextField, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Button, Box, TextField, Typography, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
 const Root = styled.div`
   display: flex;
@@ -151,7 +151,7 @@ const BidOrder = () => {
       } else if (selectedPrice === goodBid || selectedPrice === betterBid) { // Good Bid or Better Bid
         setCurrentPrice(selectedPrice);
       }
-    }, [selectedPrice, lowestAsk]);
+    }, [selectedPrice, lowestAsk, goodBid, betterBid]);
 
     const handleSubmit = () => {
       const intPrice = parseInt(currentPrice, 10);
