@@ -28,12 +28,10 @@ jobs:
         echo "FLASK_PID=$!" >> $GITHUB_ENV
 
     - name: Wait for Flask to start
-      run: sleep 15
+      run: sleep 10
 
-    - name: Extract Port Number and Check Flask Server
-      run: |
-        PORT=$(grep -oP 'Running on http://[^:]+:\K\d+' backend/flask.log)
-        curl --fail http://127.0.0.1:$PORT/ || exit 1
+    - name: Check Flask server is running
+      run: curl --fail http://127.0.0.1:5000/ || exit 1
 
     - name: Shutdown Flask server
       if: always()
