@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import uclaAskImage from '../images/UCLA_ASK.jpg';
 import {InputAdornment, Typography, Box, MenuItem, FormControl, Select, InputLabel, Input, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
 import styled from '@emotion/styled';
 
@@ -9,7 +10,7 @@ const Root = styled.div`
   align-items: center;
   height: 100vh; 
   width: 100vw; 
-  background-image: url(https://source.unsplash.com/random?wallpapers);
+  background-image: url(${uclaAskImage});
   background-size: cover;
   background-position: center;
 `;
@@ -83,13 +84,13 @@ const fetchOrderStats = async () => {
     
     // Process orders to calculate stats
     let askCount = 0;
-    let largestBidPrice = 0;
+    let largestBidPrice = 10;
 
     orders.forEach(order => {
-      if (order.side === 'ASK') {
+      if (order.side === 'ASK' && order.is_matched !== true) {
         askCount++;
       }
-      if (order.side === 'BID' && order.price > largestBidPrice) {
+      if (order.side === 'BID' && order.price > largestBidPrice && order.is_matched !== true) {
         largestBidPrice = order.price;
       }
     });
@@ -137,7 +138,7 @@ const AskOrder = () => {
   const [size, setSize] = useState('');
 
   const [totalAsks, setTotalAsks] = useState(0);
-  const [largestBid, setLargestBid] = useState(0);
+  const [largestBid, setLargestBid] = useState(10);
   const [alignment, setAlignment] = useState('left');
 
   const history = useHistory();
@@ -176,7 +177,7 @@ const AskOrder = () => {
         // Now you have totalAsks and largestBid to use in your UI
       }
       if (alignment === 'right') { // 'right' corresponds to 'Sell Now'
-        setPrice(20); // Set price to the largest bid
+        setPrice(largestBid); // Set price to the largest bid
       } else {
         setPrice(0);
       }
