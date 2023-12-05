@@ -1,0 +1,9 @@
+build:
+  languages:
+    - python
+  buildpacks:
+    - url: heroku/python
+  scripts:
+    - pip install -r backend/requirements.txt
+run:
+  web: gunicorn backend.app:app
