@@ -11,13 +11,13 @@ variables:
   azureServiceConnectionId: '9694666f-7c84-44f6-abd4-25d36450f982'
 
   # Web app name
-  webAppName: ''
+  webAppName: 'ucla-ex'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Environment name
-  environmentName: ''
+  environmentName: 'production'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)/backend
