@@ -10,6 +10,16 @@ user_route = Blueprint("user", __name__)
 
 @user_route.route("/register", methods=["POST"])
 def register():
+    """
+    Registers a new user.
+
+    This endpoint processes a POST request with JSON payload containing the user's name, email, phone, and password. 
+    It checks if the email is already in use and if not, creates a new user with the provided details.
+
+    Returns:
+        A tuple containing a JSON message indicating the outcome (success or failure) and an HTTP status code.
+    """
+
     data = request.get_json()
     name: str = data.get("name")
     email: str = data.get("email")
@@ -30,6 +40,16 @@ def register():
 
 @user_route.route("/login", methods=["POST"])
 def login():
+    """
+    Authenticates a user.
+
+    This endpoint processes a POST request with JSON payload containing the user's email and password.
+    It checks if the user exists and if the password matches, then logs the user in.
+
+    Returns:
+        A tuple containing a JSON message indicating the outcome (success, invalid credentials, or requirement of credentials) and an HTTP status code.
+    """
+
     data = request.get_json()
     email: str = data.get("email")
     password: str = data.get("password")
@@ -51,6 +71,15 @@ def login():
 @user_route.route("/logout", methods=["POST"])
 @login_required
 def logout():
+    """
+    Logs out the current user.
+
+    This endpoint handles the logging out of a logged-in user. It requires that the user is already authenticated.
+
+    Returns:
+        A tuple containing a JSON message indicating successful logout and an HTTP status code.
+    """
+
     logout_user()
     return {"message": "Logged out successfully"}, 200
 
@@ -58,6 +87,15 @@ def logout():
 @user_route.route("/whoami")
 @login_required
 def whoami():
+    """
+    Returns the current user's information.
+
+    This endpoint provides information about the currently authenticated user, such as email, name, and phone.
+
+    Returns:
+        A tuple containing the user's details in JSON format and an HTTP status code.
+    """
+
     user = cast(User, current_user)
     return {
         "email": user.email,
@@ -69,6 +107,16 @@ def whoami():
 @user_route.route("/update_profile", methods=["POST"])
 @login_required
 def profile_change():
+    """
+    Updates the profile of the current user.
+
+    This endpoint allows the logged-in user to update their profile information (name, phone, email, and password).
+    It checks for unique email and applies changes to the user's profile.
+
+    Returns:
+        A tuple containing a JSON message indicating the outcome of the update and an HTTP status code.
+    """
+
     user = cast(User, current_user)
     data = request.get_json()
 
@@ -93,6 +141,15 @@ def profile_change():
 @user_route.route("/delete_user", methods=["DELETE"])
 @login_required
 def delete_user():
+    """
+    Deletes the current user's account.
+
+    This endpoint handles the deletion of the account of the currently authenticated user. It ensures that the user exists before attempting deletion.
+
+    Returns:
+        A tuple containing a JSON message indicating the outcome of the deletion and an HTTP status code.
+    """
+
     user = cast(User, current_user)
     delete_count = user.delete()
     if delete_count == 0:
@@ -104,6 +161,15 @@ def delete_user():
 @user_route.route("/notifications", methods=["GET"])
 @login_required
 def get_notifications():
+    """
+    Retrieves notifications for the current user.
+
+    This endpoint fetches and returns all notifications associated with the currently authenticated user.
+
+    Returns:
+        A tuple containing a list of notifications in JSON format and an HTTP status code.
+    """
+
     user = cast(User, current_user)
 
     notifications = []
