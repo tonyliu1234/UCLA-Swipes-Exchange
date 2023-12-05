@@ -1,8 +1,6 @@
 build:
-  languages:
-    - python
-  scripts:
-    - mv backend/* .
-    - pip install -r requirements.txt
+  docker:
+    web: Dockerfile
 run:
-  web: gunicorn app:app
+  web: gunicorn backend.app:app
+
