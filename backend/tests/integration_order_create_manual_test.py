@@ -104,46 +104,46 @@ register_response = register(
     phone="1234567890",
     name="John Doe",
 )
+print("Register response:", register_response.json())
 assert (
     register_response.status_code == 201
 ), f"Registration failed with status code {register_response.status_code}"
-print("Register response:", register_response.json())
 
 try:
     print("Logging in...")
     login_response = login("john@example.com", "yourpassword")
+    print("Login response:", login_response.json())
     assert (
         login_response.status_code == 200
     ), f"Login failed with status code {login_response.status_code}"
-    print("Login response:", login_response.json())
 
     print("Who am I...")
     whoami_response = whoami()
+    print("Whoami response:", whoami_response.json())
     assert (
         whoami_response.status_code == 200
     ), f"Whoami failed with status code {whoami_response.status_code}"
-    print("Whoami response:", whoami_response.json())
 
     print("Creating an order...")
     create_order_response = create_order(100, "BID")
+    print("Create order response:", create_order_response.json())
     assert (
         create_order_response.status_code == 200
     ), f"Create order failed with status code {create_order_response.status_code}"
-    print("Create order response:", create_order_response.json())
 
     print("Listing orders...")
     list_orders_response = list_orders()
+    print("List orders response:", list_orders_response.json())
     assert (
         list_orders_response.status_code == 200
     ), f"List orders failed with status code {list_orders_response.status_code}"
-    print("List orders response:", list_orders_response.json())
 
     print("Getting ALL orders...")
     all_order_response = list_all_orders()
+    print("get ALL orders response:", all_order_response.json())
     assert (
         all_order_response.status_code == 200
     ), f"List all orders failed with status code {all_order_response.status_code}"
-    print("get ALL orders response:", all_order_response.json())
 
     print("Updating User Name...")
     update_response = update_profile(
@@ -152,18 +152,19 @@ try:
         phone="1234567890",
         name="John NMSL",
     )
+    print("get ALL orders response:", update_response.json())
     assert (
         update_response.status_code == 200
     ), f"Update Profile failed with status code {update_response.status_code}"
-    print("get ALL orders response:", update_response.json())
 
     print("Who am I...")
     whoami_response = whoami()
+    print("Whoami response:", whoami_response.json())
     assert (
         whoami_response.status_code == 200
     ), f"Whoami failed with status code {whoami_response.status_code}"
     assert whoami_response.json()["name"] == "John NMSL"
-    print("Whoami response:", whoami_response.json())
+
 except AssertionError as e:
     print(f"An error occurred: {e}")
     raise e
