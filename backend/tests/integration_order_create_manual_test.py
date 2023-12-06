@@ -22,7 +22,7 @@ Note: These steps are essential to ensure that the application runs correctly. M
 import requests
 
 # Base URL of the server
-base_url = "https://107.22.8.230:5000"
+base_url = "https://127.0.0.1:5000"
 
 # Start a session to persist cookies
 session = requests.Session()
