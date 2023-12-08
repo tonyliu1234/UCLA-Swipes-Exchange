@@ -120,7 +120,13 @@ This project requires Node.js, mongodb and Python installed on your machine.
 3. Setupt the Backend
    ```sh
    cd ../backend
+   pip install -r requirements.txt
    ```
+4. Check the Databse
+    ```sh
+    mongod
+    mongosh
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -140,12 +146,14 @@ _For More Information, please refer to the [User Manual](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [X] Epic - User Management
+- [X] Epic - Swipe Listings
+- [X] Epic - Order Matching and Fulfillment
+- [X] Epic - Messaging and Support
+- [X] Epic - Platform Administration
+- [X] Technical Epic - Maintain a Good Code Pattern
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/Markliniubility/UCLA-Swipes-Exchange/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -179,9 +187,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/Markliniubility/UCLA-Swipes-Exchange/tree/readme](https://github.com/Markliniubility/UCLA-Swipes-Exchange/tree/readme)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -190,9 +196,11 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Jeffrey, Lorenzo, Mark, Simon, Tony, Xiaoyang]() - For their invaluable contributions to the project.
+* [React, Nodejs, Flask,  Mongodb]() - For providing essential tools or libraries that made the project possible.
+* [UCLA Computer Science Department](https://link-to-organization.com) - For their support, be it technical, financial, or moral.
+* [Maged Elaasar, Haoran Ma, Kevin Antony	]() - For their guidance and advice throughout the development process.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
