@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -15,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import signInImage from "../images/SignIn.png";
 
 function Copyright(props) {
   return (
@@ -35,6 +34,7 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
 
 export default function SignInSide() {
   const history = useHistory(); // Create an instance of useHistory
@@ -42,16 +42,17 @@ export default function SignInSide() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // console.log(`${apiUrl}/user/login`)
 
     try {
-      const response = await axios.post("/user/login", {
+      const response = await axios.post(`${apiUrl}/user/login`, {
         email: data.get("email"),
         password: data.get("password"),
       });
 
       if (response.status === 200) {
         // Redirect to the dashboard or home page
-        history.push("/");
+        history.push("/home");
         console.log(response.data.message);
         // window.location.href = '/dashboard'; // Example redirection
       }
@@ -77,7 +78,7 @@ export default function SignInSide() {
           md={7}
           sx={{
             backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+              `url(${signInImage})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

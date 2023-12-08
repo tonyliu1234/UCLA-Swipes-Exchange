@@ -7,12 +7,10 @@ import {
   TextField,
   Button,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { useHistory } from "react-router-dom";
+
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
 
 const ChangeUserProfile = () => {
   // You would also include state management and event handlers here
@@ -45,7 +43,7 @@ const ChangeUserProfile = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/user/update_profile", {
+      const response = await fetch(`${apiUrl}/user/update_profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

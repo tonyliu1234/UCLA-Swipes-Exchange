@@ -4,13 +4,16 @@ import { List, ListItem, ListItemText, Card, Typography, Button } from '@mui/mat
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios'; // Assuming you are using axios for API calls
 
+
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+
 const AsksPage = () => {
     const [asks, setAsks] = useState([]);
     const history = useHistory();
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('/order/list_order'); // Adjust this API endpoint as needed
+                const response = await axios.get(`${apiUrl}/order/list_order`); // Adjust this API endpoint as needed
                 const asks = response.data.filter(order => order.side === 'ASK');
                 asks.sort((a, b) => new Date(b.posted) - new Date(a.posted));
                 setAsks(asks);

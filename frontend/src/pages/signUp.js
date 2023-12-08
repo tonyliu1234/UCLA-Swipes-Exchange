@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -14,6 +12,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
 
 function Copyright(props) {
   return (
@@ -51,7 +51,7 @@ export default function SignUp() {
     };
 
     // Send a POST request to the /register endpoint
-    fetch("/user/register", {
+    fetch(`${apiUrl}/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export default function SignUp() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Registration success:", data);
-        history.push("/signIn");
+        history.push("/");
       })
       .catch((error) => {
         // Handle errors
@@ -167,7 +167,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link component={RouterLink} to="/signIn" variant="body2">
+                <Link component={RouterLink} to="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
