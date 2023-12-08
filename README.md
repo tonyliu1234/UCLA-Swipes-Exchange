@@ -137,7 +137,7 @@ This project requires Node.js, mongodb and Python installed on your machine.
 
 Refer to the User Manual section below for detailed instructions on how to use the UCLA Swipes Exchange platform.
 
-_For More Information, please refer to the [User Manual](https://example.com)_
+_For More Information, please refer to the [User Manual](https://github.com/Markliniubility/UCLA-Swipes-Exchange/wiki)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
