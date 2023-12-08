@@ -152,6 +152,10 @@ To use Docker for your development environment:
 
 This setup will provide you with a development environment that mirrors our recommended settings, helping you get up and running with the project quickly.
 
+### Deploying to Vercel
+You can easily deploy this project to your Vercel account to see it live in action.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftonyliu1234%2FUCLA-Swipes-Exchange)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
