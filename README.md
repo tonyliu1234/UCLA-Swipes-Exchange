@@ -34,7 +34,7 @@
   <p align="center">
     An innovative platform for UCLA students to exchange meal swipes.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://tonyliu1234.github.io/UCLA-Swipes-Exchange"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/github_username/repo_name">View Demo</a>
