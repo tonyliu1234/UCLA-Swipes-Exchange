@@ -92,6 +92,8 @@ UCLA Swipes Exchange is a platform designed for UCLA students to easily and secu
 [![React][React.js]][React-url]
 [![Flask][Flask.js]][Flask-url]
 [![MongoDB][MongoDB.com]][MongoDB-url]
+[![Node.js][Node.js]][Node-url]
+[![Docker][Docker.com]][Docker-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -127,6 +129,30 @@ This project requires Node.js, mongodb and Python installed on your machine.
     mongod
     mongosh
     ```
+
+### Using Docker for Development
+
+For developers looking to set up a consistent and isolated development environment, our project supports containerization using Docker. This approach is particularly beneficial for ensuring that all developers work within the same environment, avoiding the "it works on my machine" problem.
+
+#### Docker Development Container
+
+We have provided the necessary configuration files in the `./devcontainer` folder. This includes:
+
+- `devcontainer.json`: Configures the development container environment.
+- `Dockerfile`: Specifies the setup of the Docker container, starting from a base Ubuntu image and including the necessary dependencies and extensions for development.
+
+By using these configurations, you can quickly spin up a Docker container tailored for full-stack development of our project.
+
+### Getting Started with Docker
+
+To use Docker for your development environment:
+
+1. Ensure you have Docker installed on your machine.
+2. Navigate to the `./devcontainer` folder in our repository.
+3. Use the `Dockerfile` and `devcontainer.json` to build and run your Docker container.
+
+This setup will provide you with a development environment that mirrors our recommended settings, helping you get up and running with the project quickly.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -227,3 +253,8 @@ Project Link: [https://github.com/Markliniubility/UCLA-Swipes-Exchange/tree/read
 [Flask-url]: https://flask.palletsprojects.com/
 [MongoDB.com]: https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white
 [MongoDB-url]: https://www.mongodb.com/
+[Node.js]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white
+[Node-url]: https://nodejs.org/
+[Docker.com]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
+
