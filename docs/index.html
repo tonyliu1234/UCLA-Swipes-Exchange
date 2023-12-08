@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to UCLA Swipes Exchange’s API documentation! &#8212; UCLA-Swipes-Exchange  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/css/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/css/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-ucla-swipes-exchange-s-api-documentation">
+<h1>Welcome to UCLA Swipes Exchange’s API documentation!<a class="headerlink" href="#welcome-to-ucla-swipes-exchange-s-api-documentation" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="module-components.notification">
+<span id="components"></span><h2>Components<a class="headerlink" href="#module-components.notification" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="components.notification.Notification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.notification.</span></span><span class="sig-name descname"><span class="pre">Notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_side</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.side.Side" title="components.side.Side"><span class="pre">Side</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.notification.Notification" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a notification related to a client.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>client_id (ObjectId): The unique identifier of the client associated with the notification.
+client_side (Side): An enum representing the side of the client.
+id (ObjectId): The unique identifier of the notification.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="components.notification.Notification.from_bson">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bson</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.notification.Notification.from_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a Notification instance from a BSON object.</p>
+<p>This method is typically used to convert data retrieved from the database back into a Notification instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bson (dict): A dictionary representing a notification’s data, typically retrieved from the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Notification: An instance of the Notification class constructed from the BSON data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.notification.Notification.to_bson">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_bson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#components.notification.Notification.to_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the notification instance to a BSON format for database storage.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representing the Notification instance, suitable for MongoDB storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.notification.Notification.to_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#components.notification.Notification.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the Notification instance to a dictionary, excluding the database ID.</p>
+<p>This is often used for JSON serialization, where the database ID is not required.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representation of the Notification instance, excluding the ‘_id’ field.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-components.order">
+<dt class="sig sig-object py" id="components.order.Order">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.order.</span></span><span class="sig-name descname"><span class="pre">Order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.side.Side" title="components.side.Side"><span class="pre">Side</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">posted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_matched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.order.Order" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a trade order in a financial trading system.</p>
+<p>This class encapsulates the details of a trade order, including price, owner, side (bid or ask), 
+timestamp, match status, and a unique identifier.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>price (int): The price of the order.
+owner_id (ObjectId): The unique identifier of the owner of the order.
+side (Side): The side of the order (either bid or ask).
+posted (datetime): The timestamp when the order was posted.
+is_matched (bool): A flag indicating whether the order has been matched.
+id (ObjectId): The unique identifier of the order.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="components.order.Order.from_bson">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bson</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.order.Order.from_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Creates an Order instance from a BSON object.</p>
+<p>This method is typically used to convert data retrieved from the database back into an Order instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bson (dict): A dictionary representing an order’s data, typically retrieved from the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Order: An instance of the Order class constructed from the BSON data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.order.Order.to_bson">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_bson</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#components.order.Order.to_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the Order instance to a BSON format for database storage.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representing the Order instance, suitable for MongoDB storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.order.Order.to_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#components.order.Order.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the Order instance to a dictionary, excluding certain fields like the database ID and owner ID.</p>
+<p>This is often used for JSON serialization, where some fields are not required.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representation of the Order instance, excluding the ‘_id’ and ‘owner_id’ fields.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-components.order_matching_engine">
+<dt class="sig sig-object py" id="components.order_matching_engine.OrderMatchingEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.order_matching_engine.</span></span><span class="sig-name descname"><span class="pre">OrderMatchingEngine</span></span><a class="headerlink" href="#components.order_matching_engine.OrderMatchingEngine" title="Link to this definition">¶</a></dt>
+<dd><p>A class that implements an order matching engine for a trading system.</p>
+<p>This engine matches bid and ask orders based on their prices. It uses two priority queues (heaps) to manage and match these orders efficiently.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>bid_queue (list[Order]): A min-heap of bid (buy) orders, sorted by price.
+ask_queue (list[Order]): A min-heap of ask (sell) orders, sorted by price.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="components.order_matching_engine.OrderMatchingEngine.match">
+<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.order_matching_engine.OrderMatchingEngine.match" title="Link to this definition">¶</a></dt>
+<dd><p>Attempts to match orders from the bid and ask queues.</p>
+<p>The matching process is based on the order prices. A bid and an ask order are matched if the bid price is 
+equal to or higher than the ask price. Matched orders are removed from the queues, and notifications are 
+sent to the respective users.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.order_matching_engine.OrderMatchingEngine.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.order.Order" title="components.order.Order"><span class="pre">Order</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.order_matching_engine.OrderMatchingEngine.push" title="Link to this definition">¶</a></dt>
+<dd><p>Adds an order to the appropriate queue based on its side (bid or ask).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>order (Order): The order to be added to the queue.</p>
+</dd>
+<dt>Raises:</dt><dd><p>TypeError: If the order’s side is neither bid nor ask.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-components.side">
+<dt class="sig sig-object py" id="components.side.Side">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.side.</span></span><span class="sig-name descname"><span class="pre">Side</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.side.Side" title="Link to this definition">¶</a></dt>
+<dd><p>Enumeration for representing the side of an order in a trading system.</p>
+<p>This enum classifies orders into two categories: BID and ASK.
+BID represents a buy order, and ASK represents a sell order.</p>
+<dl class="simple">
+<dt>Members:</dt><dd><p>BID (str): Represents a buy order.
+ASK (str): Represents a sell order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class" id="module-components.user">
+<dt class="sig sig-object py" id="components.user.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.user.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#components.order.Order" title="components.order.Order"><span class="pre">Order</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notifications</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#components.notification.Notification" title="components.notification.Notification"><span class="pre">Notification</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.user.User" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a user in the system.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>name (str): The name of the user.
+phone (str): The phone number of the user.
+email (str): The email address of the user.
+password (str): The hashed password of the user.
+orders (list[Order]): List of orders associated with the user.
+notifications (list[Notification]): List of notifications associated with the user.
+id (ObjectId): The unique identifier of the user in the database.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.create" title="Link to this definition">¶</a></dt>
+<dd><p>Stores the User instance in the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.create_notification">
+<span class="sig-name descname"><span class="pre">create_notification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">notification</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.notification.Notification" title="components.notification.Notification"><span class="pre">Notification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.create_notification" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a notification to the user’s list of notifications and updates the database record.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>notification (Notification): The notification to add to the user’s list of notifications.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.create_order">
+<span class="sig-name descname"><span class="pre">create_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.order.Order" title="components.order.Order"><span class="pre">Order</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.create_order" title="Link to this definition">¶</a></dt>
+<dd><p>Adds an order to the user’s list of orders and updates the database record.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>order (Order): The order to add to the user’s list of orders.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes the User record from the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.from_bson">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bson</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.user.User.from_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a User instance from a BSON object.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bson (dict): A dictionary representing a user’s data, typically retrieved from the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>User: An instance of the User class constructed from the BSON data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.from_email">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.user.User.from_email" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a user from the database by their email address.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>email (str): The email address of the user.</p>
+</dd>
+<dt>Returns:</dt><dd><p>User: An instance of the User class if found, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.from_id">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#components.user.User.from_id" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a user from the database by their unique identifier.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (ObjectId): The unique identifier of the user in the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>User: An instance of the User class if found, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.get_order">
+<span class="sig-name descname"><span class="pre">get_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#components.order.Order" title="components.order.Order"><span class="pre">Order</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.get_order" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves an order by its ID from the user’s list of orders.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>order_id (ObjectId): The unique identifier of the order.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Optional[Order]: The order if found, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.hash_password">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#components.user.User.hash_password" title="Link to this definition">¶</a></dt>
+<dd><p>Hash a password using SHA-256.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>password (str): The password to hash.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: The hashed password.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.User.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.User.persist" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the existing User record in the database with the current instance’s values.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.user.User.to_bson">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_bson</span></span><a class="headerlink" href="#components.user.User.to_bson" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the User instance to a BSON format for database storage.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representing the User instance, suitable for MongoDB storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="components.user.User.to_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#components.user.User.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Converts the User instance to a dictionary, excluding the database ID.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A dictionary representation of the User instance, excluding the ‘_id’ field.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="components.user.UserCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">components.user.</span></span><span class="sig-name descname"><span class="pre">UserCollection</span></span><a class="headerlink" href="#components.user.UserCollection" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a collection of User documents in the database.</p>
+<p>This class provides methods to interact with the users’ collection in the database, 
+including creating, retrieving, updating, and deleting user documents.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.user.User" title="components.user.User"><span class="pre">User</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectId</span></span></span><a class="headerlink" href="#components.user.UserCollection.create" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new user document in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user (User): The user instance to be stored in the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ObjectId: The ID of the created document in the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#components.user.UserCollection.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes a user document from the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>document_id (ObjectId): The unique identifier of the user document to delete.</p>
+</dd>
+<dt>Returns:</dt><dd><p>int: The number of documents deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#components.user.User" title="components.user.User"><span class="pre">User</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.UserCollection.get" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a user from the database by their document ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>document_id (ObjectId): The unique identifier of the user document in the database.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Optional[User]: The user if found, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.get_all">
+<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#components.user.User" title="components.user.User"><span class="pre">User</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#components.user.UserCollection.get_all" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves all users from the database.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[User]: A list of User instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.get_all_order">
+<span class="sig-name descname"><span class="pre">get_all_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#components.order.Order" title="components.order.Order"><span class="pre">Order</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#components.user.UserCollection.get_all_order" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves all orders from all users.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Order]: A list of Order instances from all users.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.get_by_email">
+<span class="sig-name descname"><span class="pre">get_by_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#components.user.User" title="components.user.User"><span class="pre">User</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#components.user.UserCollection.get_by_email" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a user from the database by their email address.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>email (str): The email address of the user.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Optional[User]: The user if found, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="components.user.UserCollection.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ObjectId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#components.user.User" title="components.user.User"><span class="pre">User</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#components.user.UserCollection.update" title="Link to this definition">¶</a></dt>
+<dd><p>Updates a user document in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>document_id (ObjectId): The unique identifier of the user document to update.
+user (User): The user instance with updated information.</p>
+</dd>
+<dt>Returns:</dt><dd><p>int: The number of documents modified.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-routes.order_routes">
+<span id="routes"></span><h2>Routes<a class="headerlink" href="#module-routes.order_routes" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.order_routes.create_order">
+<span class="sig-prename descclassname"><span class="pre">routes.order_routes.</span></span><span class="sig-name descname"><span class="pre">create_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.order_routes.create_order" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a new order for the currently logged-in user.</p>
+<p>This route handles a POST request with JSON payload containing the order’s price and side (BID or ASK). 
+The order is added to the user’s list of orders and then passed to the order matching engine.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing the created order’s details in JSON format and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.order_routes.get_order">
+<span class="sig-prename descclassname"><span class="pre">routes.order_routes.</span></span><span class="sig-name descname"><span class="pre">get_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.order_routes.get_order" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves a specific order for the currently logged-in user.</p>
+<p>This route handles a GET request and expects an ‘id’ field in the JSON payload to specify the order’s ID. 
+If the order exists and belongs to the current user, it returns the order details.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing the order details in JSON format and an HTTP status code. 
+Returns a 404 error if the order is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.order_routes.list_all_order">
+<span class="sig-prename descclassname"><span class="pre">routes.order_routes.</span></span><span class="sig-name descname"><span class="pre">list_all_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.order_routes.list_all_order" title="Link to this definition">¶</a></dt>
+<dd><p>Lists all orders in the system.</p>
+<p>This route handles a GET request and returns a list of all orders from all users. 
+It is typically used for administrative purposes or data analysis.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a list of all orders in JSON format and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.order_routes.list_order">
+<span class="sig-prename descclassname"><span class="pre">routes.order_routes.</span></span><span class="sig-name descname"><span class="pre">list_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.order_routes.list_order" title="Link to this definition">¶</a></dt>
+<dd><p>Lists all orders for the currently logged-in user.</p>
+<p>This route handles a GET request and returns a list of all orders associated with the current user.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a list of the user’s orders in JSON format and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-routes.user_routes">
+<dt class="sig sig-object py" id="routes.user_routes.delete_user">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">delete_user</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.delete_user" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes the current user’s account.</p>
+<p>This endpoint handles the deletion of the account of the currently authenticated user. It ensures that the user exists before attempting deletion.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a JSON message indicating the outcome of the deletion and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.get_notifications">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">get_notifications</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.get_notifications" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves notifications for the current user.</p>
+<p>This endpoint fetches and returns all notifications associated with the currently authenticated user.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a list of notifications in JSON format and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.login">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.login" title="Link to this definition">¶</a></dt>
+<dd><p>Authenticates a user.</p>
+<p>This endpoint processes a POST request with JSON payload containing the user’s email and password.
+It checks if the user exists and if the password matches, then logs the user in.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a JSON message indicating the outcome (success, invalid credentials, or requirement of credentials) and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.logout">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.logout" title="Link to this definition">¶</a></dt>
+<dd><p>Logs out the current user.</p>
+<p>This endpoint handles the logging out of a logged-in user. It requires that the user is already authenticated.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a JSON message indicating successful logout and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.profile_change">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">profile_change</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.profile_change" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the profile of the current user.</p>
+<p>This endpoint allows the logged-in user to update their profile information (name, phone, email, and password).
+It checks for unique email and applies changes to the user’s profile.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a JSON message indicating the outcome of the update and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.register">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.register" title="Link to this definition">¶</a></dt>
+<dd><p>Registers a new user.</p>
+<p>This endpoint processes a POST request with JSON payload containing the user’s name, email, phone, and password. 
+It checks if the email is already in use and if not, creates a new user with the provided details.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing a JSON message indicating the outcome (success or failure) and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="routes.user_routes.whoami">
+<span class="sig-prename descclassname"><span class="pre">routes.user_routes.</span></span><span class="sig-name descname"><span class="pre">whoami</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#routes.user_routes.whoami" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the current user’s information.</p>
+<p>This endpoint provides information about the currently authenticated user, such as email, name, and phone.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A tuple containing the user’s details in JSON format and an HTTP status code.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">UCLA-Swipes-Exchange</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Jeffrey Yu, Liu Cao, Haohai Li, Xiaoyang Liu, Bowen Liu, Haobo Yuan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
