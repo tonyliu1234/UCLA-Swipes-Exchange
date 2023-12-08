@@ -70,9 +70,12 @@ const StyledInput = styled(Input)({
   fontSize: '1.25rem', // Adjust the font size as needed, '1.25rem' is similar to h6
 });
 
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+
 const fetchOrderStats = async () => {
+
   try {
-    const response = await fetch('/order/list_all_order', { // Adjust the URL to where your orders are fetched from
+    const response = await fetch(`${apiUrl}/order/list_all_order`, { // Adjust the URL to where your orders are fetched from
       method: 'GET',
       credentials: 'include',
     });
@@ -111,7 +114,7 @@ const submitAskOrder = async (price, size) => {
   };
 
   try {
-    const response = await fetch('/order/create_order', {
+    const response = await fetch(`${apiUrl}/order/create_order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +147,7 @@ const AskOrder = () => {
   const history = useHistory();
 
   const handleCancel = () => {
-    history.push('/');
+    history.push('/home');
   };
 
   const handleSubmit = () => {
@@ -152,7 +155,7 @@ const AskOrder = () => {
     if (!isNaN(intPrice)) {
       submitAskOrder(intPrice, size).then(response => {
         alert('Successfully created order!');
-        history.push('/');
+        history.push('/home');
       }).catch(error => {
         console.error('Error submitting ask order:', error);
       });

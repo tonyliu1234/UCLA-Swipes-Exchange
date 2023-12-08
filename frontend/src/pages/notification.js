@@ -14,6 +14,8 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Button } from "@mui/material";
 
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const useMockData = false; // Set to false to fetch data from the API
@@ -44,7 +46,7 @@ function NotificationsPage() {
     } else {
       // Fetch notifications from the API
       axios
-        .get("/user/notifications")
+        .get(`${apiUrl}/user/notifications`)
         .then((response) => {
           setNotifications(response.data);
         })

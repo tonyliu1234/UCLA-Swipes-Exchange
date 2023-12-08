@@ -49,9 +49,11 @@ const StyledToggleButton = styled(ToggleButton)`
   }
 `;
 
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+
 const fetchBidStats = async () => {
     try {
-      const response = await fetch('/order/list_all_order', {
+      const response = await fetch(`${apiUrl}/order/list_all_order`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +113,7 @@ const BidOrder = () => {
     const history = useHistory();
   
     const handleCancel = () => {
-      history.push('/'); // Navigate to the root or another desired route
+      history.push('/home'); // Navigate to the root or another desired route
     };
 
     const handlePriceSelection = (event, newValue) => {
@@ -158,7 +160,7 @@ const BidOrder = () => {
       if (!isNaN(intPrice)) {
         submitBidOrder(intPrice).then(response => {
           alert('Successfully created order!');
-          history.push('/');
+          history.push('/home');
         }).catch(error => {
           console.error('Error submitting bid order:', error);
         });
@@ -177,7 +179,7 @@ const BidOrder = () => {
         };
       
         try {
-          const response = await fetch('/order/create_order', {
+          const response = await fetch(`${apiUrl}/order/create_order`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

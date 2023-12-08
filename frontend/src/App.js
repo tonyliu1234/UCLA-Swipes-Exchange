@@ -16,12 +16,12 @@ function App() {
     <Router>
       <Switch>
         <Route path="/userProfile" component={userProfile} />
-        <Route path="/signIn" component={signIn} />
         <Route path="/signUp" component={signUp} />
+        <Route path="/home" component={Home} />
         <Route path="/changeUserProfile" component={changeUserProfile} />
         <Route path="/ask" component={AskOrder} />
         <Route path="/bid" component={BidOrder} />
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={signIn} />
         <Route path="/notification" component={Notification} />
         <Route path="/AsksPage" component={AsksPage} />
         <Route path="/BidsPage" component={BidsPage} />

@@ -10,8 +10,6 @@ import {
   Typography,
   Card,
   CardContent,
-  TextField,
-  Button,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -22,11 +20,13 @@ import EditIcon from "@mui/icons-material/Edit"; // import Edit icon
 import HomeIcon from "@mui/icons-material/Home"; // import Edit icon
 import { useHistory } from "react-router-dom";
 
+const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+
 export default function UserProfile() {
   let history = useHistory();
 
   const handleHomeClick = () => {
-    history.push("/");
+    history.push("/home");
   };
 
   const handleEditProfileClick = () => {
@@ -48,14 +48,14 @@ export default function UserProfile() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/user/logout", {
+      const response = await fetch(`${apiUrl}/user/logout`, {
         method: "POST",
         credentials: "include", // Correct value for credentials
       });
 
       if (response.status === 200) {
         // Redirect to login page or update UI state
-        history.push("/signIn");
+        history.push("/");
       } else {
         // Attempt to read JSON response
         try {
@@ -82,7 +82,7 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("/user/whoami", {
+        const response = await fetch(`${apiUrl}/user/whoami`, {
           method: "GET",
           credentials: "include",
         });
