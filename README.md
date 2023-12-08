@@ -21,7 +21,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -244,8 +243,6 @@ Project Link: [https://github.com/Markliniubility/UCLA-Swipes-Exchange/tree/read
 [issues-url]: https://github.com/Markliniubility/UCLA-Swipes-Exchange/issues
 [license-shield]: https://img.shields.io/github/license/Markliniubility/UCLA-Swipes-Exchange.svg?style=for-the-badge
 [license-url]: https://github.com/Markliniubility/UCLA-Swipes-Exchange/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: ./readmeSrc/HOME.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
