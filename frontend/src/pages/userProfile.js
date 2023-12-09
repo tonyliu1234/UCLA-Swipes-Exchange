@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
@@ -10,81 +10,80 @@ import {
   Typography,
   Card,
   CardContent,
-} from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import SellIcon from "@mui/icons-material/Sell";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import NotificationsIcon from "@mui/icons-material/Notifications"; // Import Notifications icon
-import EditIcon from "@mui/icons-material/Edit"; // import Edit icon
-import HomeIcon from "@mui/icons-material/Home"; // import Edit icon
-import { useHistory } from "react-router-dom";
+} from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SellIcon from '@mui/icons-material/Sell';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import EditIcon from '@mui/icons-material/Edit';
+import HomeIcon from '@mui/icons-material/Home';
+import { useHistory } from 'react-router-dom';
 
-const apiUrl = process.env.REACT_APP_API_URL === undefined ? "" : process.env.REACT_APP_API_URL
+const apiUrl =
+  process.env.REACT_APP_API_URL === undefined
+    ? ''
+    : process.env.REACT_APP_API_URL;
 
 export default function UserProfile() {
   let history = useHistory();
 
   const handleHomeClick = () => {
-    history.push("/home");
+    history.push('/home');
   };
 
   const handleEditProfileClick = () => {
-    // Use the correct path to your "changeUserProfile" page
-    history.push("./changeUserProfile");
+    history.push('./changeUserProfile');
   };
 
   const handleNotifiacationClick = () => {
-    history.push("./notification");
+    history.push('./notification');
   };
 
   const handleBuyingClick = () => {
-    history.push("./BidsPage");
+    history.push('./BidsPage');
   };
 
   const handleSellingClick = () => {
-    history.push("./AsksPage");
+    history.push('./AsksPage');
   };
 
   const handleLogout = async () => {
     try {
       const response = await fetch(`${apiUrl}/user/logout`, {
-        method: "POST",
-        credentials: "include", // Correct value for credentials
+        method: 'POST',
+        credentials: 'include',
       });
 
       if (response.status === 200) {
-        // Redirect to login page or update UI state
-        history.push("/");
+        history.push('/');
       } else {
         // Attempt to read JSON response
         try {
           const data = await response.json();
-          console.error("Logout failed:", data.message);
+          console.error('Logout failed:', data.message);
         } catch {
           // Handle non-JSON response
-          console.error("Logout failed: Non-JSON response received");
+          console.error('Logout failed: Non-JSON response received');
         }
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
 
-  // Step 1: State for storing user data
   const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    name: '',
+    email: '',
+    phone: '',
   });
 
-  // Step 2: Fetching data
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(`${apiUrl}/user/whoami`, {
-          method: "GET",
-          credentials: "include",
+          method: 'GET',
+          credentials: 'include',
         });
         if (response.ok) {
           const data = await response.json();
@@ -94,10 +93,10 @@ export default function UserProfile() {
             phone: data.phone,
           });
         } else {
-          console.error("Failed to fetch user data");
+          console.error('Failed to fetch user data');
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       }
     };
 
@@ -105,17 +104,16 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <Box sx={{ display: "flex", p: 2 }}>
-      <Grid container spacing={2} sx={{ height: "100vh" }}>
-        {/* Left part */}
+    <Box sx={{ display: 'flex', p: 2 }}>
+      <Grid container spacing={2} sx={{ height: '100vh' }}>
         <Grid
           item
           xs={12}
           sm={3}
           sx={{
-            bgcolor: "grey.200",
-            display: "flex",
-            flexDirection: "column",
+            bgcolor: 'grey.200',
+            display: 'flex',
+            flexDirection: 'column',
             // justifyContent: "center",
           }}
         >
@@ -130,11 +128,9 @@ export default function UserProfile() {
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>
-            {/* Add a Home button */}
             <ListItem button onClick={handleHomeClick} sx={{ py: 2 }}>
               <ListItemIcon>
-                {/* You can use an appropriate icon here */}
-                <HomeIcon /> {/* Import this icon from @mui/icons-material */}
+                <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
@@ -180,11 +176,10 @@ export default function UserProfile() {
           </List>
         </Grid>
 
-        {/* Right part */}
         <Grid item xs={12} sm={9}>
           <Card
             variant="outlined"
-            sx={{ minWidth: 275, boxShadow: "none", border: "none", ml: 8 }}
+            sx={{ minWidth: 275, boxShadow: 'none', border: 'none', ml: 8 }}
           >
             <CardContent>
               <Typography
